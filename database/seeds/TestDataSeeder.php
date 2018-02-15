@@ -129,6 +129,7 @@ class TestDataSeeder extends Seeder
 
         ////////////////////////////////////////
 
+
         // grant test
         $leaf_g = $tree_x->graftMethod($leaf_e);
 
@@ -140,5 +141,66 @@ class TestDataSeeder extends Seeder
 
         $leaf_g->bearMethod($fruit_g);
 
+
+        ////////////////////////////////////////
+
+        $leaf_h = Leaf::create();
+
+        $fruit_h = Fruit::create([
+            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
+            'title' => '実H',
+            'content' => '実Hの中身です'
+        ]);
+
+        $leaf_h->bearMethod($fruit_h);
+        $tree_x->growMethod($leaf_h);
+
+
+        ////////////////////////////////////////
+
+        $leaf_i = Leaf::create();
+
+        $fruit_i = Fruit::create([
+            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
+            'title' => '実I',
+            'content' => '実Iの中身です'
+        ]);
+
+        $leaf_i->bearMethod($fruit_i);
+        $tree_x->growMethod($leaf_i);
+
+
+        ////////////////////////////////////////
+
+
+        // branch test
+        $leaf_j = $leaf_h->branchMethod('Zの木');
+        $tree_z = $leaf_j->tree;
+
+        $fruit_j = Fruit::create([
+            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
+            'title' => '実J',
+            'content' => '本当は I までのまとめを編集して載せる',
+        ]);
+
+        $leaf_j->bearMethod($fruit_j);
+
+
+        ////////////////////////////////////////
+
+
+        // grant test
+        $leaf_k = $tree_x->graftMethod($leaf_j);
+
+        $fruit_k = Fruit::create([
+            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
+            'title' => '実K',
+            'content' => '本当は J のまとめを編集して載せる'
+        ]);
+
+        $leaf_k->bearMethod($fruit_k);
+
+
     }
+
 }

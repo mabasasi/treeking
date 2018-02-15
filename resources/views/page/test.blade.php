@@ -12,12 +12,21 @@
 
             {{--葉 leaf の表示--}}
             {{ (!$leaf->is_tail) ? '├' : '└' }}
-            leaf: {{ $leaf->id }}
+            leaf: {{ $leaf->id }}&nbsp;&nbsp;
+            @if($leaf->is_root)
+                [ROOT]
+            @endif
+            @if($leaf->is_head)
+                [HEAD]
+            @endif
+            @if($leaf->is_tail)
+                [TAIL]
+            @endif
             @isset($leaf->originLeaf)
-                &nbsp;&nbsp;[<= origin: {{ $leaf->originLeaf->tree_id.'-'.$leaf->originLeaf->id }}]
+                [<= origin: {{ $leaf->originLeaf->tree_id.'-'.$leaf->originLeaf->id }}]
             @endisset
             @foreach($leaf->insertLeaves as $insert)
-                &nbsp;&nbsp;[=> insert: {{ $insert->tree_id.'-'.$insert->id }}]
+                [=> insert: {{ $insert->tree_id.'-'.$insert->id }}]
             @endforeach
             <br>
 
