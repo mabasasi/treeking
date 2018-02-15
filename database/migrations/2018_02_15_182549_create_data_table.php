@@ -33,7 +33,7 @@ class CreateDataTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('leafs', function (Blueprint $table) {
+        Schema::create('leaves', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('tree_id');                         // 所属する tree
             $table->unsignedInteger('parent_leaf_id')->nullable();      // 親の leaf
@@ -63,15 +63,15 @@ class CreateDataTable extends Migration
             $table->foreign('fruit_type_id')->references('id')->on('fruit_types');
         });
 
-        Schema::table('leafs', function (Blueprint $table) {
-            $table->foreign('parent_leaf_id')->references('id')->on('leafs');
-            $table->foreign('origin_leaf_id')->references('id')->on('leafs');
+        Schema::table('leaves', function (Blueprint $table) {
+            $table->foreign('parent_leaf_id')->references('id')->on('leaves');
+            $table->foreign('origin_leaf_id')->references('id')->on('leaves');
             $table->foreign('current_fruit_id')->references('id')->on('fruits');
         });
 
         Schema::table('trees', function (Blueprint $table) {
-            $table->foreign('head_leaf_id')->references('id')->on('leafs');
-            $table->foreign('tail_leaf_id')->references('id')->on('leafs');
+            $table->foreign('head_leaf_id')->references('id')->on('leaves');
+            $table->foreign('tail_leaf_id')->references('id')->on('leaves');
         });
     }
 
@@ -93,7 +93,7 @@ class CreateDataTable extends Migration
         });
 
         Schema::dropIfExists('trees');
-        Schema::dropIfExists('leafs');
+        Schema::dropIfExists('leaves');
         Schema::dropIfExists('fruit_types');
         Schema::dropIfExists('fruits');
     }
