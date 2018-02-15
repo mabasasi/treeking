@@ -17,3 +17,5 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/home', 'TestController')->name('test');
+
+Route::post('/action/grow', 'TreeActionController@growTree')->name('action.tree.grow');

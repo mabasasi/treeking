@@ -8,12 +8,24 @@
 
 
 <style>
-/*extend bootstrap*/
-.margin {
-    margin: 1rem 0;
-}
-.form-group {
-    margin: 0;
-}
+
+    /*extend bootstrap*/
+    .margin {
+        margin: 1rem 0;
+    }
+
+
+    /*fixed bootstrap*/
+    .invalid-feedback {
+        display: block !important;
+    }
+
+    .is-valid .form-control {
+        border-color: #28a745;
+    }
+
+    .is-invalid .form-control {
+        border-color: #dc3545;
+    }
 
 </style>

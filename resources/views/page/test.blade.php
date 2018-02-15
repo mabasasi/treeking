@@ -1,16 +1,58 @@
 @extends('layouts.treeking')
+@section('title', 'テストページ')
+@push('scripts')
+<script>
+    $('.collapse').collapse('toggle');
+</script>
+@endpush
 
 @section('content')
     <div class="container-fluid">
         <div class="row">
             <div class="col">
 
-                <div class="card margin">
-                    <div class="card-body">
+                <div class="card card-body margin">
+                    <div class="">
+
                         <div class="form-group">
+                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="form-collapse" aria-expanded="false" aria-controls="form-collapse">
+                                <i class="fas fa-caret-down"></i>
+                            </button>
                             <a class="btn btn-outline-primary" href="{{ route('test') }}">更新</a>
                             <a class="btn btn-outline-danger" href="{{ route('test', ['seed' => 'true']) }}">データごと更新</a>
                         </div>
+
+                        <div class="collapse" id="form-collapse">
+                            <hr>
+
+                            <h4>木の成長[grow]</h4>
+                            <p>各種木の先端に リーフ と フルーツ を生やします.</p>
+                            {{ Form::open(['method' => 'POST', 'url' => route('action.tree.grow')]) }}
+
+                            @component('parts.inline-form-component',['name' => 'title', 'label' => 'タイトル'])
+                                {{ Form::text('title', old('title'), ['class' => 'form-control']) }}
+                            @endcomponent
+
+                            @component('parts.inline-form-component',['name' => 'content', 'label' => '内容'])
+                                {{ Form::textarea('content', old('content'), ['class' => 'form-control', 'size' => '10x3']) }}
+                            @endcomponent
+
+                            @component('parts.inline-form-component',['name' => 'fruit_type_id', 'label' => '種類'])
+                                {{ Form::select('fruit_type_id', \App\Models\FruitType::selectPluck(), old('fruit_type_id'), ['class' => 'form-control']) }}
+                            @endcomponent
+
+                            @component('parts.inline-form-component',['name' => 'tree_id', 'label' => '対象の木'])
+                                {{ Form::select('tree_id', \App\Models\Tree::selectPluck(), old('tree_id'), ['class' => 'form-control']) }}
+                            @endcomponent
+
+                            <div class="row justify-content-md-center">
+                                <div class="col-sm-4">
+                                    {{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}
+                                </div>
+                            </div>
+                            {{ Form::close() }}
+                        </div>
+
                     </div>
                 </div>
 
@@ -19,6 +61,7 @@
 
         <div class="row">
             <div class="col">
+
                 <div style="font-family: monospace; font-size: 16px;">
                     @forelse($trees as $tree)
                         tree: {{ $tree->id }}&nbsp;&nbsp;&nbsp;&nbsp;{{ $tree->name }}<br>
@@ -68,6 +111,7 @@
                     @endforelse
 
                 </div>
+
             </div>
         </div>
     </div>
