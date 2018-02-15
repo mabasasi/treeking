@@ -33,7 +33,7 @@ class Tree extends Model {
         if ($leaf->id == 0) {
             throw new TreeCreateException('leaf が保存されていません.');
         }
-        if ($leaf->tree !== null) {
+        if ($leaf->tree_id !== null) {
             throw new TreeCreateException('leaf が既に他の tree に関連付けられています.');
         }
 
@@ -68,5 +68,7 @@ class Tree extends Model {
         }
 
     }
+
+    public
 
 }
