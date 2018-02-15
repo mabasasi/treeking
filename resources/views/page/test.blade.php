@@ -4,7 +4,7 @@
 
 <div style="font-family: monospace; font-size: 20px;">
     @forelse($trees as $tree)
-        tree: {{ $tree->id }}&nbsp;&nbsp;&nbsp;&nbsp;{{ $tree->title }}<br>
+        tree: {{ $tree->id }}&nbsp;&nbsp;&nbsp;&nbsp;{{ $tree->name }}<br>
 
         {{--先端から順番に葉を表示--}}
         @php($leaf = $tree->headLeaf)
