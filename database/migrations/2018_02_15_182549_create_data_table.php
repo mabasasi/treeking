@@ -23,11 +23,11 @@ class CreateDataTable extends Migration
 
         Schema::create('fruits', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('leaf_id');         // 所属する leaf
+            $table->unsignedInteger('leaf_id')->nullable(); // 所属する leaf
 
-            $table->unsignedInteger('fruit_type_id');   // fruit の種別
-            $table->string('revision')->nullable();     // fruit のバージョン情報(基本は数字、任意で文字列)
-            $table->string('title')->nullable();        // fruit の内容
+            $table->unsignedInteger('fruit_type_id');       // fruit の種別
+            $table->string('revision')->nullable();         // fruit のバージョン情報(基本は数字、任意で文字列)
+            $table->string('title')->nullable();            // fruit の内容
             $table->text('content')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -35,7 +35,7 @@ class CreateDataTable extends Migration
 
         Schema::create('leaves', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('tree_id');                         // 所属する tree
+            $table->unsignedInteger('tree_id')->nullable();             // 所属する tree
             $table->unsignedInteger('parent_leaf_id')->nullable();      // 親の leaf
             $table->unsignedInteger('origin_leaf_id')->nullable();      // マージ元の leaf
 
