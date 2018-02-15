@@ -24,9 +24,9 @@ class CreateDataTable extends Migration
         Schema::create('fruits', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('leaf_id');         // 所属する leaf
-            $table->string('revision');                 // バージョン情報(基本は数字、任意で文字列)
 
             $table->unsignedInteger('fruit_type_id');   // fruit の種別
+            $table->string('revision')->nullable();     // fruit のバージョン情報(基本は数字、任意で文字列)
             $table->string('title')->nullable();        // fruit の内容
             $table->text('content')->nullable();
             $table->timestamps();
