@@ -1,6 +1,6 @@
 <?php
 
-namespace Libraries\ModelTrait;
+namespace App\Libraries\ModelTrait;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -19,7 +19,9 @@ trait SelectBoxArrayTrait {
      * @return array key value
      */
     protected function getKeyValue() {
-        return [$this->id => $this->name];
+        $id = $this->id;
+        $title = $this->name ?? $this->title ?? $this->id;
+        return [$id => $title];
     }
 
     /**

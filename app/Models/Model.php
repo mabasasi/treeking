@@ -9,9 +9,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Libraries\ModelTrait\RelationTrait;
-use Libraries\ModelTrait\SearchQueryTrait;
-use Libraries\ModelTrait\SelectBoxArrayTrait;
+use App\Libraries\ModelTrait\RelationTrait;
+use App\Libraries\ModelTrait\SearchQueryTrait;
+use App\Libraries\ModelTrait\SelectBoxArrayTrait;
 
 class Model extends \Illuminate\Database\Eloquent\Model {
     use RelationTrait;

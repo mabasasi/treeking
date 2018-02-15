@@ -1,16 +1,15 @@
 <?php
+
+namespace App\Libraries\ModelTrait;
+
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * Created by PhpStorm.
  * User: mabasasi
  * Date: 2017/10/23
  * Time: 0:14
  */
-
-namespace Libraries\ModelTrait;
-
-
-use Illuminate\Database\Eloquent\Collection;
-
 trait RelationTrait {
 
     /**

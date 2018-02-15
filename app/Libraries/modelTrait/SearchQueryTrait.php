@@ -1,6 +1,6 @@
 <?php
 
-namespace Libraries\ModelTrait;
+namespace App\Libraries\ModelTrait;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
