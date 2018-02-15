@@ -66,8 +66,8 @@
                     @empty
                         empty trees!
                     @endforelse
-                </div style="font-family: monospace; font-size: 16px;">
 
+                </div>
             </div>
         </div>
     </div>
