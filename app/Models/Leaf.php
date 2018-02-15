@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Exceptions\TreeCreateException;
-use Illuminate\Database\Eloquent\Model;
 
 class Leaf extends Model {
 

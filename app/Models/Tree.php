@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Exceptions\TreeCreateException;
-use Illuminate\Database\Eloquent\Model;
-
 class Tree extends Model {
 
     protected $fillable = [
