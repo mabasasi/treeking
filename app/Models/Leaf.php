@@ -38,8 +38,7 @@ class Leaf extends Model {
     }
 
     public function insertLeaves() {
-        // TODO 一つだけのはず
-        return $this->hasOne('App\Models\leaf', 'origin_leaf_id');
+        return $this->hasMany('App\Models\leaf', 'origin_leaf_id');
     }
 
     public function fruits() {
@@ -56,6 +55,7 @@ class Leaf extends Model {
     /**
      * 葉に実を付ける.
      * @param fruit $fruit 実(どこにも属していない実)
+     * @return Fruit 引数の fruit
      * @throws TreeCreateException
      */
     public function bearMethod(Fruit $fruit) {
@@ -75,6 +75,8 @@ class Leaf extends Model {
         // fruit に自身を登録
         $fruit->leaf_id = $this->id;
         $fruit->save();
+
+        return $fruit;
     }
 
 }

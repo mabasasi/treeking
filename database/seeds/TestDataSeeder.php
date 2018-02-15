@@ -89,8 +89,8 @@ class TestDataSeeder extends Seeder
 
         $fruit_d = Fruit::create([
             'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実A',
-            'content' => '実Aの中身です',
+            'title' => '実D',
+            'content' => '実Dの中身です',
         ]);
 
         $leaf_d->bearMethod($fruit_d);
@@ -111,6 +111,34 @@ class TestDataSeeder extends Seeder
         $leaf_e->bearMethod($fruit_e);
         $tree_y->growMethod($leaf_e);
 
+
+        ////////////////////////////////////////
+
+
+        $leaf_f = Leaf::create();
+
+        $fruit_f = Fruit::create([
+            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
+            'title' => '実F',
+            'content' => '実Fの中身です'
+        ]);
+
+        $leaf_f->bearMethod($fruit_f);
+        $tree_y->growMethod($leaf_f);
+
+
+        ////////////////////////////////////////
+
+        // grant test
+        $leaf_g = $tree_x->graftMethod($leaf_e);
+
+        $fruit_g = Fruit::create([
+            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
+            'title' => '実G',
+            'content' => '本当は D E のまとめを編集して載せる'
+        ]);
+
+        $leaf_g->bearMethod($fruit_g);
 
     }
 }

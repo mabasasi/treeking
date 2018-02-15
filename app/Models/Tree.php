@@ -27,6 +27,7 @@ class Tree extends Model {
     /**
      * 木に葉を生やして成長させる.
      * @param Leaf $leaf 葉(どこにも属していない葉)
+     * @return Leaf 引数の leaf
      * @throws TreeCreateException
      */
     public function growMethod(Leaf $leaf) {
@@ -67,8 +68,37 @@ class Tree extends Model {
             $leaf->save();
         }
 
+        return $leaf;
     }
 
-    public
+
+    /**
+     * 木に別の木の葉を生やして成長させる.
+     * (このメソッド後に実を付ける必要あり)
+     * @param Leaf $leaf どこかの tree に生えている葉
+     * @return Leaf 新規に生やした葉
+     * @throws TreeCreateException
+     */
+    public function graftMethod(Leaf $leaf) {
+        if ($leaf->id == 0) {
+            throw new TreeCreateException('leaf が保存されていません.');
+        }
+        if ($leaf->tree_id === null) {
+            throw new TreeCreateException('tree に関連付けられている leaf である必要があります.');
+        }
+        if ($leaf->tree_id === $this->id) {
+            throw new TreeCreateException('別の tree に関連付けられている leaf である必要があります.');
+        }
+
+        // 実がない葉を自身の木に生やす
+        $newLeaf = Leaf::create();
+        $this->growMethod($newLeaf);
+
+        // 新たな leaf に分岐前ポインタを付与
+        $newLeaf->origin_leaf_id = $leaf->id;
+        $newLeaf->save();
+
+        return $newLeaf;
+    }
 
 }
