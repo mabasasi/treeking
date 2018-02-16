@@ -1,5 +1,5 @@
 
-@php($hasError  = (count($errors->all()) > 0))
+@php($hasError  = count($errors) > 0)
 @php($thisError = $errors->has($name))
 
 <div class="form-group row">
