@@ -18,6 +18,8 @@ class AppServiceProvider extends ServiceProvider
         \Validator::resolver(function ($translator, $data, $rules, $messages) {
             return new DatabaseValidator($translator, $data, $rules, $messages);
         });
+
+        \DB::enableQueryLog();
     }
 
     /**

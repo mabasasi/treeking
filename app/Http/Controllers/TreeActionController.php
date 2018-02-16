@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LeafBearRequest;
+use App\Http\Requests\LeafBranchRequest;
 use App\Http\Requests\TreeGrowRequest;
 use App\Http\Requests\TreePlantRequest;
 use App\Models\Fruit;
@@ -51,6 +52,16 @@ class TreeActionController extends Controller {
         \DB::transaction(function() use ($request){
 
             $tree = Tree::create(['name' => $request['name']]);
+        });
+
+        return back();
+    }
+
+    public function branchLeaf(LeafBranchRequest $request) {
+        \DB::transaction(function() use ($request){
+
+            $leaf = Leaf::findOrFail($request['leaf_id']);
+            $leaf->branchMethod($request['tree_name']);
         });
 
         return back();

@@ -21,6 +21,9 @@
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#plant-collapse" aria-expanded="false" aria-controls="plant-collapse">
                             PLANT <i class="fas fa-caret-down"></i>
                         </button>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#branch-collapse" aria-expanded="false" aria-controls="branch-collapse">
+                            BRANCH <i class="fas fa-caret-down"></i>
+                        </button>
                     </div>
 
                     <div class="collapse" id="grow-collapse">
@@ -92,8 +95,31 @@
                         <p>新たな木を作る.</p>
                         {{ Form::open(['method' => 'POST', 'url' => route('action.tree.plant')]) }}
 
-                        @component('parts.inline-form-component',['name' => 'name', 'label' => '名前'])
+                        @component('parts.inline-form-component',['name' => 'name', 'label' => '木の名前'])
                             {{ Form::text('name', old('name'), ['class' => 'form-control']) }}
+                        @endcomponent
+
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-4">
+                                {{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}
+                            </div>
+                        </div>
+                        {{ Form::close() }}
+                    </div>
+
+                    <div class="collapse" id="branch-collapse">
+                        <hr>
+
+                        <h4>葉を移植する[BRANCH]</h4>
+                        <p>リーフを別の木へも接続する.</p>
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.leaf.branch')]) }}
+
+                        @component('parts.inline-form-component',['name' => 'tree_name', 'label' => '木の名前'])
+                            {{ Form::text('tree_name', old('tree_name'), ['class' => 'form-control']) }}
+                        @endcomponent
+
+                        @component('parts.inline-form-component',['name' => 'leaf_id', 'label' => '対象の葉'])
+                            {{ Form::select('leaf_id', \App\Models\Leaf::selectPluck(), old('leaf_id'), ['class' => 'form-control']) }}
                         @endcomponent
 
                         <div class="row justify-content-md-center">

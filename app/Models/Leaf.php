@@ -82,12 +82,10 @@ class Leaf extends Model {
         return $fruit;
     }
 
-
     /**
      * 葉から別の木を成長させる.
-     * (このメソッド後に実を付ける必要あり)
      * @param string $newBranchName 新たな木の名前
-     * @return Leaf 新規に生やした葉
+     * @return Tree 新規に生やした木
      * @throws TreeCreateException
      */
     public function branchMethod(string $newBranchName) {
@@ -95,21 +93,18 @@ class Leaf extends Model {
             throw new TreeCreateException('leaf が保存されていません.');
         }
         if ($this->tree_id === null) {
-            throw new TreeCreateException('leaf が他の tree に関連付けていません.');
+            throw new TreeCreateException('leaf が他の tree に関連付けられていません.');
         }
 
-        // 新たな木を生やす
-        $tree = Tree::create(['name' => $newBranchName]);
+        // 新たな木を生やす（ポインタは、葉を示すように）
+        // 葉の所属はあくまでも別の tree
+        $tree = Tree::create([
+            'name' => $newBranchName,
+            'head_leaf_id' => $this->id,
+            'tail_leaf_id' => $this->id,
+        ]);
 
-        // 実がない葉を生やす
-        $newLeaf = Leaf::create();
-        $tree->growMethod($newLeaf);
-
-        // 新たな leaf に分岐前ポインタを付与
-        $newLeaf->origin_leaf_id = $this->id;
-        $newLeaf->save();
-
-        return $newLeaf;
+        return $tree;
     }
 
 

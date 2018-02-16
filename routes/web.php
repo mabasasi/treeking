@@ -18,6 +18,7 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/home', 'TestController')->name('test');
 
-Route::post('/action/grow',  'TreeActionController@growTree')->name('action.tree.grow');
-Route::post('/action/bear',  'TreeActionController@bearLeaf')->name('action.leaf.bear');
-Route::post('/action/plant', 'TreeActionController@plantTree')->name('action.tree.plant');
+Route::post('/action/grow',   'TreeActionController@growTree')->name('action.tree.grow');
+Route::post('/action/bear',   'TreeActionController@bearLeaf')->name('action.leaf.bear');
+Route::post('/action/plant',  'TreeActionController@plantTree')->name('action.tree.plant');
+Route::post('/action/branch', 'TreeActionController@branchLeaf')->name('action.leaf.branch');

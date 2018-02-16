@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Exceptions\TreeCreateException;
+
 class Tree extends Model {
 
     protected $fillable = [
@@ -36,19 +38,27 @@ class Tree extends Model {
         }
 
         $new_leaf_id = $leaf->id;
-        $tail = $this->tail_leaf_id;
         $head = $this->head_leaf_id;
+        $tail = $this->tail_leaf_id;
 
-        if (($tail > 0) and ($head > 0)) {
+        if ($this->head_leaf_id and $this->tail_leaf_id) {
             // 自身に先頭と末尾がある場合...
+            $head_leaf = Leaf::findOrFail($this->head_leaf_id);
 
             // 自身の leaf の先頭ポインタをずらして、葉を生やす
             $this->head_leaf_id = $new_leaf_id;
             $this->save();
 
             // leaf に自身を登録し、 leaf 自身の親に以前の先頭ポインタを設定
+            // 以前の head leaf が自身の tree 所属である場合は親とする
             $leaf->tree_id        = $this->id;
-            $leaf->parent_leaf_id = $head;
+            if ($head_leaf->tree_id === $leaf->tree_id) {
+                $leaf->parent_leaf_id = $head_leaf->id;
+                $leaf->origin_leaf_id = null;
+            } else {
+                $leaf->parent_leaf_id = null;
+                $leaf->origin_leaf_id = $head_leaf->id;
+            }
             $leaf->save();
 
         } else {
@@ -62,6 +72,7 @@ class Tree extends Model {
             // leaf に自身を登録し、 leaf 自身の親に念のため空ポインタを設定
             $leaf->tree_id        = $this->id;
             $leaf->parent_leaf_id = null;
+            $leaf->origin_leaf_id = null;
             $leaf->save();
         }
 
@@ -71,7 +82,7 @@ class Tree extends Model {
 
     /**
      * 木に別の木の葉を生やして成長させる.
-     * (このメソッド後に実を付ける必要あり)
+     * (このメソッドの後に実を付ける必要あり)
      * @param Leaf $leaf どこかの tree に生えている葉
      * @return Leaf 新規に生やした葉
      * @throws TreeCreateException

@@ -174,20 +174,23 @@ class TestDataSeeder extends Seeder
 
 
         // branch test
-        $leaf_j = $leaf_h->branchMethod('Zの木');
-        $tree_z = $leaf_j->tree;
+        $tree_z = $leaf_h->branchMethod('Zの木');
+
+        ////////////////////////////////////////
+
+        $leaf_j = Leaf::create();
 
         $fruit_j = Fruit::create([
             'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
             'title' => '実J',
-            'content' => '本当は I までのまとめを編集して載せる',
+            'content' => '実Jの中身です'
         ]);
 
         $leaf_j->bearMethod($fruit_j);
+        $tree_z->growMethod($leaf_j);
 
 
         ////////////////////////////////////////
-
 
         // grant test
         $leaf_k = $tree_x->graftMethod($leaf_j);
@@ -199,7 +202,6 @@ class TestDataSeeder extends Seeder
         ]);
 
         $leaf_k->bearMethod($fruit_k);
-
 
     }
 
