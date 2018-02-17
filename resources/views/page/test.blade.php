@@ -10,19 +10,19 @@
 
                     <div>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#grow-collapse" aria-expanded="false" aria-controls="grow-collapse">
-                            GROW <i class="fas fa-caret-down"></i>
+                            <span class="octicon octicon-git-commit"></span> GROW
                         </button>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#bear-collapse" aria-expanded="false" aria-controls="bear-collapse">
-                            BEAR <i class="fas fa-caret-down"></i>
+                            <span class="octicon octicon-sync"></span> BEAR
                         </button>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#plant-collapse" aria-expanded="false" aria-controls="plant-collapse">
-                            PLANT <i class="fas fa-caret-down"></i>
+                            <span class="octicon octicon-plus"></span> PLANT
                         </button>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#branch-collapse" aria-expanded="false" aria-controls="branch-collapse">
-                            BRANCH <i class="fas fa-caret-down"></i>
+                            <span class="octicon octicon-git-branch"></span> BRANCH
                         </button>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#graft-collapse" aria-expanded="false" aria-controls="graft-collapse">
-                            GRAFT <i class="fas fa-caret-down"></i>
+                            <span class="octicon octicon-git-pull-request"></span> GRAFT
                         </button>
 
                         <div class="float-right">
