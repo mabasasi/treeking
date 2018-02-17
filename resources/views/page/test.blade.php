@@ -144,7 +144,7 @@
 
                         {{--先端から順番に葉を表示--}}
                         @php($leaf = $tree->headLeaf)
-                        @while($leaf !== null)
+                        @while($leaf !== null and $leaf->tree_id === $tree->id)
 
                             {{--葉 leaf の表示--}}
                             {{ (!$leaf->is_tail) ? '├' : '└' }}
