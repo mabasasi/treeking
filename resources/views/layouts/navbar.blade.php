@@ -35,10 +35,10 @@
         </ul>
 
         <!-- Right Element -->
-        {{--<form class="form-inline my-2 my-lg-0">--}}
-            {{--<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">--}}
-            {{--<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>--}}
-        {{--</form>--}}
+        <span class="navbar-text">
+            env: {{ \Config::get('app.env') }} - {{ \Config::get('app.debug') == 'true' ? 'debug' : '' }}
+        </span>
 
     </div>
+
 </nav>
