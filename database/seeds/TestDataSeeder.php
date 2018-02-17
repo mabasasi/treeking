@@ -95,15 +95,31 @@ class TestDataSeeder extends Seeder
         // test graft and bear
         $sprig_h = $branch_beta->graftMethod('H', $sprig_g);
         $sprig_h->bearMethod([
-            'content' => 'HHHHH  marge FF and GG.',
+            'content' => 'HHHHH  marge GG.',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
 
 
+        // test graft and bear
+        $sprig_i = $branch_alpha->graftMethod('I', $sprig_h);
+        $sprig_i->bearMethod([
+            'content' => 'IIIII  marge HH.',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
+        ]);
 
 
 
+        // dummy
+        $sprig_j = $branch_alpha->growWithBearMethod('J', [
+            'content' => 'JJJJJ',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
+        ]);
+
+        $sprig_k = $branch_charlie->growWithBearMethod('K', [
+            'content' => 'KKKKK',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
+        ]);
 
     }
 
