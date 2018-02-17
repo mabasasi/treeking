@@ -32,7 +32,7 @@ class Branch extends Model {
      * @param string $sprigName 名前
      * @return Sprig 作成した sprig
      */
-    public function growMethod(string $sprigName) {
+    public function growMethod(string $sprigName = null) {
         // とりあえず 枝 を作る
         $newSprig = Sprig::create([
             'name'      => $sprigName,
@@ -112,7 +112,7 @@ class Branch extends Model {
      * @return Sprig 作成した sprig (leaf は sprig の current で取得)
      * @throws \Illuminate\Validation\ValidationException leaf のバリデーション失敗
      */
-    public function growAndBearMethod(string $sprigName, array $leafParams) {
+    public function growAndBearMethod(string $sprigName = null, array $leafParams) {
         $sprig = $this->growMethod($sprigName);
         $leaf  = $sprig->bearMethod($leafParams);
 

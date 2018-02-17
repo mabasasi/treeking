@@ -2,10 +2,15 @@
 @section('title', 'めも帳')
 
 @section('content')
+
+    @include('treeking.widget-create-form')
+
+    <hr>
+
     <div class="row">
         <div class="col">
 
-            index
+            tree
 
         </div>
     </div>
