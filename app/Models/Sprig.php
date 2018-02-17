@@ -8,6 +8,11 @@ class Sprig extends Model {
         'name', 'branch_id', 'parent_sprig_id', 'origin_sprig_id', 'current_leaf_id'
     ];
 
+    public function is_join(Branch $branch = null) {
+        if (is_null($branch))   return false;
+        return $this->branch_id === $branch->id;
+    }
+
     public function getIsRootAttribute() {
         return ($this->parent_sprig_id == null and $this->origin_sprig_id == null);
     }
@@ -34,11 +39,11 @@ class Sprig extends Model {
         return $this->belongsTo('App\Models\Sprig', 'origin_sprig_id');
     }
 
-    public function childSprings() {
+    public function childSprigs() {
         return $this->hasMany('App\Models\Sprig', 'parent_sprig_id');
     }
 
-    public function insertSprings() {
+    public function insertSprigs() {
         return $this->hasMany('App\Models\Spring', 'origin_sprig_id');
     }
 
