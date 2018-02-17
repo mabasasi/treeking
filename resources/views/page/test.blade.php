@@ -177,9 +177,9 @@
                                 {!! out_if_true(!$sprig->is_tail, '┣', '┗') !!}
 
                                 sprig: {{ $branch->id }}-{{ $sprig->id }} &lt;{{ $sprig->name }}&gt;
-                                {!! out_if_true($sprig->is_head, '<span class="badge badge-secondary">HEAD</span>') !!}
-                                {!! out_if_true($sprig->is_tail, '<span class="badge badge-secondary">TAIL</span>') !!}
-                                {!! out_if_true($sprig->is_root, '<span class="badge badge-secondary">ROOT</span>') !!}
+                                {!! out_if_true($sprig->is_head, '<span class="badge badge-primary">HEAD</span>') !!}
+                                {!! out_if_true($sprig->is_tail, '<span class="badge badge-warning">TAIL</span>') !!}
+                                {!! out_if_true($sprig->is_root, '<span class="badge badge-success">ROOT</span>') !!}
 
                                 @if($origin = ($sprig->originSprig))
                                     <span class="badge badge-secondary"><= ORIGIN {{ $origin->branch_id.'-'.$origin->id }}</span>
@@ -191,25 +191,41 @@
 
                             {{--全ての葉を表示--}}
                             @if($sprig->is_join($branch))
-                                @foreach($sprig->leaves as $leaf)
+                                @forelse($sprig->leaves as $leaf)
                                     <div>
                                         {!! out_if_true(!$sprig->is_tail, '┃', '　') !!}
                                         {!! out_if_true($leaf->is_current, '>>', '　') !!}
 
                                         leaf: {{ $sprig->branch_id }}-{{ $sprig->id }}-{{ $leaf->id }} ({{ optional($leaf->type)->name ?? '-' }}) => {{ str_limit($leaf->content, 20, '...') }}<br>
                                     </div>
-                                @endforeach
+                                @empty
+                                    <div>
+                                        {!! out_if_true(!$sprig->is_tail, '┃', '　') !!}
+
+                                        <span class="badge badge-danger">EMPTY LEAF!</span>
+                                    </div>
+                                @endforelse
                             @endif
 
                             {{--次の枝を取得--}}
                             @php($sprig = $sprig->parentSprig)
                         @endwhile
 
+
+                        {{--枝がない場合の処理--}}
+                        @if($branch->is_empty)
+                            <div>
+                                {!! out_if_true($branch->head_sprig_id, '┃', '　') !!}
+                                <span class="badge badge-danger">EMPTY SPRIG!</span>
+                            </div>
+                        @endif
+
+
                         {{--別の枝から生えた場合の処理--}}
                         @if($sprig = ($branch->tailSprig) and !$sprig->is_join($branch))
                             <div>
-                                {!! '┛' !!}
-                                {!! out_if_true(true, '<span class="badge badge-secondary">TAIL</span>') !!}
+                                {!! out_if_true(true, '┛') !!}
+                                <span class="badge badge-warning">TAIL</span>
                             </div>
                         @endif
 

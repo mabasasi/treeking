@@ -10,6 +10,10 @@ class Branch extends Model {
         'name', 'head_sprig_id', 'tail_sprig_id'
     ];
 
+    public function getIsEmptyAttribute() {
+        return optional($this->sprigs)->isEmpty();
+    }
+
     public function sprigs() {
         return $this->hasMany('App\Models\Sprig');
     }

@@ -13,6 +13,10 @@ class Sprig extends Model {
         return $this->branch_id === $branch->id;
     }
 
+    public function getIsEmptyAttribute() {
+        return optional($this->leaves)->isEmpty();
+    }
+
     public function getIsRootAttribute() {
         return ($this->parent_sprig_id == null and $this->origin_sprig_id == null);
     }
