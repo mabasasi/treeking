@@ -180,6 +180,43 @@
             <div class="col">
 
                 <div style="font-family: monospace; font-size: 16px;">
+                    @foreach($branches as $branch)
+                        <div>
+                            {{ '◆' }}
+
+                            branch: {{ $branch->id }} &lt;{{ $branch->name }}&gt;
+                        </div>
+
+                        {{--先頭から順番に枝を表示--}}
+                        @php ($sprig = $branch->headSprig)
+                        @while($sprig !== null and $sprig->branch_id === $branch->id)
+                            <div>
+                                {!! out_if_true(!$sprig->is_tail, '┣', '┗') !!}
+
+                                sprig: {{ $branch->id }}-{{ $sprig->id }} &lt;{{ $sprig->name }}&gt;
+                                {!! out_if_true($sprig->is_head, '<span class="badge badge-secondary">HEAD</span>') !!}
+                                {!! out_if_true($sprig->is_tail, '<span class="badge badge-secondary">TAIL</span>') !!}
+                                {!! out_if_true($sprig->is_root, '<span class="badge badge-secondary">ROOT</span>') !!}
+                            </div>
+
+                            {{--全ての葉を表示--}}
+                            @foreach($sprig->leaves as $leaf)
+                                <div>
+                                    {!! out_if_true(!$sprig->is_tail, '┃', '　') !!}
+                                    {!! out_if_true($leaf->is_current, '>>', '　') !!}
+
+                                    leaf: {{ $branch->id }}-{{ $sprig->id }}-{{ $leaf->id }} ({{ optional($leaf->type)->name ?? '-' }}) => {{ str_limit($leaf->content, 20, '...') }}<br>
+                                </div>
+                            @endforeach
+
+                            @php($sprig = $sprig->parentSprig)
+                        @endwhile
+
+                        ----------<br>
+                    @endforeach
+
+
+
                     {{--@forelse($trees as $tree)--}}
                         {{--tree: {{ $tree->id }}&nbsp;&nbsp;&nbsp;&nbsp;{{ $tree->name }}<br>--}}
 

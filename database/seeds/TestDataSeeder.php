@@ -29,10 +29,29 @@ class TestDataSeeder extends Seeder
 
         $branch_alpha = Branch::create(['name' => 'ALPHA']);
 
+
         $sprig_a = $branch_alpha->growWithBearMethod('A', [
             'content' => 'AAAAA',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
+
+        $sprig_b = $branch_alpha->growWithBearMethod('B', [
+            'content' => 'BBBBB',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
+        ]);
+
+        $sprig_c = $branch_alpha->growWithBearMethod('C', [
+            'content' => 'CCCCC',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
+        ]);
+
+
+
+        $leaf_bb = $sprig_b->bearMethod([
+            'content' => 'modify B',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
+        ]);
+
 
 
 
