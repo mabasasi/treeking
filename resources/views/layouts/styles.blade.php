@@ -15,7 +15,6 @@
         margin: 0.5rem 0 0 0;
     }
 
-
     /*fixed bootstrap*/
     .nav-tabs {
         margin: 0 0 0.5rem 0;
