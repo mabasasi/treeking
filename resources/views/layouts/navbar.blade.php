@@ -11,6 +11,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('test') }}">テストページ</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('treeking.index') }}">めも帳</a>
+            </li>
 
             {{--<li class="nav-item active">--}}
                 {{--<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>--}}

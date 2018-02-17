@@ -18,6 +18,15 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/home', 'TestController')->name('test');
 
+
+Route::get('/treeking', 'TreekingController@index')->name('treeking.index');
+
+
+
+
+
+
+
 Route::get('/debug/seed',  'DebugController@dbSeed')->name('debug.seed');
 Route::get('/debug/fresh', 'DebugController@dbMigrationFresh')->name('debug.fresh');
 
