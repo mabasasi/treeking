@@ -29,7 +29,7 @@
                             <div>
                                 {!! out_if_true(!$sprig->is_tail, '┣', '┗') !!}
 
-                                sprig: {{ $branch->id }}-{{ $sprig->id }} &lt;{{ $sprig->name }}&gt;
+                                sprig: {{ $branch->id }}-{{ $sprig->id }} &lt;{!! $sprig->name ?? '<span class="text-danger">NO NAME</span>' !!}&gt;
                                 {!! out_if_true($sprig->is_head, '<span class="badge badge-primary">HEAD</span>') !!}
                                 {!! out_if_true($sprig->is_tail, '<span class="badge badge-warning">TAIL</span>') !!}
                                 {!! out_if_true($sprig->is_root, '<span class="badge badge-success">ROOT</span>') !!}
