@@ -27,8 +27,8 @@
 
                         <div class="float-right">
                             <a class="btn btn-outline-primary" href="{{ route('test') }}">更新</a>
-                            <a class="btn btn-outline-warning" href="{{ route('test', ['seed' => 'true']) }}">DB構築</a>
-                            <a class="btn btn-outline-danger"  href="{{ route('test', ['seed' => 'true']) }}">初期化</a>
+                            <a class="btn btn-outline-danger"  href="{{ route('debug.seed') }}">DB初期化</a>
+                            <a class="btn btn-danger"          href="{{ route('debug.fresh') }}">DB再構築</a>
                         </div>
                     </div>
 
