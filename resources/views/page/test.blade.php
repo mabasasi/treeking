@@ -55,7 +55,7 @@
                                         <div>
                                             {!! out_if_true(!$sprig->is_tail, '┃', '　') !!}
 
-                                            <span class="badge badge-danger">EMPTY LEAF!</span>
+                                            <span class="badge badge-danger">EMPTY LEAF! PLEASE BEAR!</span>
                                         </div>
                                     @endforelse
                                 @endif
@@ -69,7 +69,7 @@
                             @if($branch->is_empty)
                                 <div>
                                     {!! out_if_true($branch->head_sprig_id, '┃', '　') !!}
-                                    <span class="badge badge-danger">EMPTY SPRIG!</span>
+                                    <span class="badge badge-danger">EMPTY SPRIG! PLEASE GROW!</span>
                                 </div>
                             @endif
 
