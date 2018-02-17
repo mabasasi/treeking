@@ -59,6 +59,13 @@ class Branch extends Model {
                 $parent_sprig_id = null;
                 $origin_sprig_id = $headSprig->id;
             }
+
+        } else {
+            // 存在しないば場合、ポインタを新たに作成した 枝 に変更 (cache 対策で再取得)
+            $this->fill([
+                'head_sprig_id' => $newSprig->id,
+                'tail_sprig_id' => $newSprig->id,
+            ])->save();
         }
 
         // 新たに作成した 枝 に親のパラメタを設定
