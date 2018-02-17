@@ -6,6 +6,7 @@ use App\Http\Requests\LeafBearRequest;
 use App\Http\Requests\LeafBranchRequest;
 use App\Http\Requests\TreeBearRequest;
 use App\Http\Requests\TreeGraftRequest;
+use App\Http\Requests\TreeGrowAndBearRequest;
 use App\Http\Requests\TreeGrowRequest;
 use App\Http\Requests\TreePlantRequest;
 use App\Http\Requests\TreeRamifyRequest;
@@ -40,7 +41,7 @@ class TreeActionController extends Controller {
         return back();
     }
 
-    public function growAndBear($request) {
+    public function growAndBear(TreeGrowAndBearRequest $request) {
         \DB::transaction(function() use ($request) {
             $branch = Branch::findOrFail($request->get('branch_id'));
             $sprig = $branch->growAndBearMethod($request->get('sprig_name'), [
