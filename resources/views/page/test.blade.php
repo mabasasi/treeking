@@ -189,7 +189,7 @@
 
                         {{--先頭から順番に枝を表示--}}
                         @php ($sprig = $branch->headSprig)
-                        @while($sprig !== null and $sprig->branch_id === $branch->id)
+                        @while($sprig !== null and $sprig->is_join($branch))
                             <div>
                                 {!! out_if_true(!$sprig->is_tail, '┣', '┗') !!}
 
@@ -197,20 +197,37 @@
                                 {!! out_if_true($sprig->is_head, '<span class="badge badge-secondary">HEAD</span>') !!}
                                 {!! out_if_true($sprig->is_tail, '<span class="badge badge-secondary">TAIL</span>') !!}
                                 {!! out_if_true($sprig->is_root, '<span class="badge badge-secondary">ROOT</span>') !!}
+
+                                @if($origin = ($sprig->originSprig))
+                                    <span class="badge badge-secondary"><= ORIGIN {{ $origin->branch_id.'-'.$origin->id }}</span>
+                                @endif
+                                @foreach($sprig->insertSprigs as $insert)
+                                    <span class="badge badge-secondary">=> INSERT {{ $insert->branch_id.'-'.$insert->id }}</span>
+                                @endforeach
                             </div>
 
                             {{--全ての葉を表示--}}
-                            @foreach($sprig->leaves as $leaf)
-                                <div>
-                                    {!! out_if_true(!$sprig->is_tail, '┃', '　') !!}
-                                    {!! out_if_true($leaf->is_current, '>>', '　') !!}
+                            @if($sprig->is_join($branch))
+                                @foreach($sprig->leaves as $leaf)
+                                    <div>
+                                        {!! out_if_true(!$sprig->is_tail, '┃', '　') !!}
+                                        {!! out_if_true($leaf->is_current, '>>', '　') !!}
 
-                                    leaf: {{ $branch->id }}-{{ $sprig->id }}-{{ $leaf->id }} ({{ optional($leaf->type)->name ?? '-' }}) => {{ str_limit($leaf->content, 20, '...') }}<br>
-                                </div>
-                            @endforeach
+                                        leaf: {{ $sprig->branch_id }}-{{ $sprig->id }}-{{ $leaf->id }} ({{ optional($leaf->type)->name ?? '-' }}) => {{ str_limit($leaf->content, 20, '...') }}<br>
+                                    </div>
+                                @endforeach
+                            @endif
 
+                            {{--次の枝を取得--}}
                             @php($sprig = $sprig->parentSprig)
                         @endwhile
+
+                        {{--別の枝から生えた場合の処理--}}
+                        @if($sprig = ($branch->tailSprig) and !$sprig->is_join($branch))
+                            <div>
+                                {!! '┛' !!}
+                            </div>
+                        @endif
 
                         ----------<br>
                     @endforeach
@@ -264,7 +281,7 @@
                         {{--empty trees!--}}
                     {{--@endforelse--}}
 
-                </div>
+                </>
 
             </div>
         </div>

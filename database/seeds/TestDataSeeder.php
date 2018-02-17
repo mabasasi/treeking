@@ -27,7 +27,7 @@ class TestDataSeeder extends Seeder
         // テストケースを作成する
         LeafType::create(['id' => Consts::FRUIT_TYPE_PLANE, 'name' => '標準']);
 
-        $branch_alpha = Branch::create(['name' => 'ALPHA']);
+        $branch_alpha = Branch::create(['name' => 'BRANCH_ALPHA']);
 
 
         $sprig_a = $branch_alpha->growWithBearMethod('A', [
@@ -52,6 +52,21 @@ class TestDataSeeder extends Seeder
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
+
+
+        $sprig_d = $branch_alpha->growWithBearMethod('D', [
+            'content' => 'DDDDD',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
+        ]);
+
+
+
+        $branch_beta = $sprig_d->ramifyMethod('BRANCH_BRAVO');
+
+        $sprig_e = $branch_beta->growWithBearMethod('E', [
+            'content' => 'EEEEE',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
+        ]);
 
 
 
