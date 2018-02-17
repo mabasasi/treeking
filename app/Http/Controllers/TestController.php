@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tree;
+use App\models\Branch;
 use Illuminate\Http\Request;
 
 class TestController extends Controller {
 
     public function __invoke() {
-        $trees = Tree::all();
-        return view('page.test')->with(compact('trees'));
+        $branches = Branch::all();
+        return view('page.test')->with(compact('branches'));
     }
 
 }

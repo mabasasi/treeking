@@ -1,4 +1,5 @@
 
+{{--Laravel の Validation Error に最適化--}}
 @php($hasError  = count($errors) > 0)
 @php($thisError = $errors->has($name))
 

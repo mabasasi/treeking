@@ -4,84 +4,65 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LeafBearRequest;
 use App\Http\Requests\LeafBranchRequest;
+use App\Http\Requests\TreeBearRequest;
 use App\Http\Requests\TreeGraftRequest;
 use App\Http\Requests\TreeGrowRequest;
 use App\Http\Requests\TreePlantRequest;
+use App\Http\Requests\TreeRamifyRequest;
+use App\models\Branch;
 use App\Models\Fruit;
 use App\Models\Leaf;
+use App\models\Sprig;
 use App\Models\Tree;
 use Illuminate\Http\Request;
 
 class TreeActionController extends Controller {
 
-    public function growTree(TreeGrowRequest $request) {
-        \DB::transaction(function() use ($request){
+    public function grow(TreeGrowRequest $request) {
+        \DB::transaction(function() use ($request) {
+            $branch = Branch::findOrFail($request->get('branch_id'));
+            $branch->growMethod($request->get('name'));
+        });
 
-            $tree = Tree::findOrFail($request['tree_id']);
+        return back();
+    }
 
-            $leaf  = Leaf::create();
-            $fruit = Fruit::create([
-                'fruit_type_id' => $request['fruit_type_id'],
-                'title'         => $request['title'],
-                'content'       => $request['content'],
+    public function bear(TreeBearRequest $request) {
+        \DB::transaction(function() use ($request) {
+            $sprig = Sprig::findOrFail($request->get('sprig_id'));
+            $sprig->bearMethod([
+                'leaf_type_id' => $request->get('leaf_type_id'),
+                'revision'     => $request->get('revision'),
+                'content'      => $request->get('content'),
             ]);
-
-            $leaf->bearMethod($fruit);
-            $tree->growMethod($leaf);
         });
 
         return back();
     }
 
-    public function bearLeaf(LeafBearRequest $request) {
-        \DB::transaction(function() use ($request){
-
-            $leaf  = Leaf::findOrFail($request['leaf_id']);
-            $fruit = Fruit::create([
-                'fruit_type_id' => $request['fruit_type_id'],
-                'title'         => $request['title'],
-                'content'       => $request['content'],
-            ]);
-
-            $leaf->bearMethod($fruit);
+    public function plant(TreePlantRequest $request) {
+        \DB::transaction(function() use ($request) {
+            $branch = Branch::create(['name' => $request['name']]);
         });
 
         return back();
     }
 
-    public function plantTree(TreePlantRequest $request) {
-        \DB::transaction(function() use ($request){
-
-            $tree = Tree::create(['name' => $request['name']]);
+    public function ramify(TreeRamifyRequest $request) {
+        \DB::transaction(function() use ($request) {
+            $sprig = Sprig::findOrFail($request->get('sprig_id'));
+            $sprig->ramifyMethod($request->get('name'));
         });
 
         return back();
     }
 
-    public function branchLeaf(LeafBranchRequest $request) {
-        \DB::transaction(function() use ($request){
+    public function graft(TreeGraftRequest $request) {
+        \DB::transaction(function() use ($request) {
+            $sprig = Sprig::findOrFail($request->get('sprig_id'));
 
-            $leaf = Leaf::findOrFail($request['leaf_id']);
-            $leaf->branchMethod($request['tree_name']);
-        });
-
-        return back();
-    }
-
-    public function graftTree(TreeGraftRequest $request) {
-        \DB::transaction(function() use ($request){
-
-            $tree = Tree::findOrFail($request['tree_id']);
-            $leaf = Leaf::findOrFail($request['leaf_id']);
-
-            $newLeaf = $tree->graftMethod($leaf);
-            $fruit = Fruit::create([
-                'fruit_type_id' => $request['fruit_type_id'],
-                'title'         => $request['title'],
-                'content'       => $request['content'],
-            ]);
-
-            $newLeaf->bearMethod($fruit);
+            $branch = Branch::findOrFail($request->get('branch_id'));
+            $branch->graftMethod($request->get('name'), $sprig);
         });
 
         return back();

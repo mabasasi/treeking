@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LeafBranchRequest extends FormRequest {
+class TreeRamifyRequest extends FormRequest {
 
     public function authorize() {
         return true;
@@ -12,10 +12,10 @@ class LeafBranchRequest extends FormRequest {
 
     public function rules() {
         return [
-            'leaf_id'   => 'required|exists:leaves,id',
+            'sprig_id' => 'required|exists:sprigs,id',
 
             // TODO いずれはユーザーごとに一意
-            'tree_name' => 'required|string|max:255|unique:trees,name',
+            'name'     => 'required|string|max:255|unique:branches,name',
         ];
     }
 

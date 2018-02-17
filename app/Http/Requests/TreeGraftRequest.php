@@ -12,12 +12,10 @@ class TreeGraftRequest extends FormRequest {
 
     public function rules() {
         return [
-            'title'          => 'required_without:content|string|max:255',
-            'content'        => 'required_without:title|string|max:65535',
-            'fruit_type_id'  => 'required|exists:fruit_types,id',
+            'sprig_id'  => 'required|exists:sprigs,id',
+            'branch_id' => 'required|exists:branches,id',
 
-            'leaf_id'        => 'required|exists:leaves,id',
-            'tree_id'        => 'required|exists:trees,id',
+            'name'      => 'required|string|max:255',
         ];
     }
 

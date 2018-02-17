@@ -13,7 +13,7 @@ class TreePlantRequest extends FormRequest {
     public function rules() {
         return [
             // TODO いずれはユーザーごとに一意
-            'name' => 'required|string|max:255|unique:trees,name',
+            'name' => 'required|string|max:255|unique:branches,name',
         ];
     }
 
