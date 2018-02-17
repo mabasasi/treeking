@@ -19,12 +19,24 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     use SelectBoxArrayTrait;
     use SoftDeletes;
 
-    public function scopeUpdateNewer($query) {
-        return $query->orderBy($this->getUpdatedAtColumn(), 'DESC');
+    public function scopeUpdatedNewer($query) {
+        return $query->orderBy($this->getUpdatedAtColumn(), 'DESC')
+            ->orderBy('id', 'DESC');
     }
 
-    public function scopeUpdateOlder($query) {
-        return $query->orderBy($this->getUpdatedAtColumn(), 'ASC');
+    public function scopeUpdatedOlder($query) {
+        return $query->orderBy($this->getUpdatedAtColumn(), 'ASC')
+            ->orderBy('id', 'ASC');
+    }
+
+    public function scopeCreatedNewer($query) {
+        return $query->orderBy($this->getCreatedAtColumn(), 'DESC')
+            ->orderBy('id', 'DESC');
+    }
+
+    public function scopeCreatedOlder($query) {
+        return $query->orderBy($this->getCreatedAtColumn(), 'ASC')
+            ->orderBy('id', 'ASC');
     }
 
 }

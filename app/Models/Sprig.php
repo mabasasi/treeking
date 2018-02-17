@@ -4,9 +4,17 @@ namespace App\models;
 
 class Sprig extends Model {
 
+    protected $appends = ['branch_name'];
+
+    public function getBranchNameAttribute() {
+        return optional($this->branch)->name;
+    }
+
+
     protected $fillable = [
         'name', 'branch_id', 'parent_sprig_id', 'origin_sprig_id', 'current_leaf_id'
     ];
+
 
     public function is_join(Branch $branch = null) {
         if (is_null($branch))   return false;

@@ -7,11 +7,5 @@
 
     <hr>
 
-    <div class="row">
-        <div class="col">
-
-            tree
-
-        </div>
-    </div>
+    @include('treeking.widget-tree', ['sprigs' => $sprigs])
 @endsection

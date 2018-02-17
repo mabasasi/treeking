@@ -9,7 +9,7 @@
                 めもる！
                 <div class="pull-right">
                     <span id="branch-name" class="text-secondary">
-                        {{ optional(\App\models\Branch::updateNewer()->first())->name ?? 'Nothing.' }}
+                        {{ optional(\App\models\Branch::updatedNewer()->first())->name ?? 'Nothing.' }}
                     </span>
                 </div>
             @endslot
