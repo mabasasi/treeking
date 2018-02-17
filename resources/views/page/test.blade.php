@@ -226,6 +226,7 @@
                         @if($sprig = ($branch->tailSprig) and !$sprig->is_join($branch))
                             <div>
                                 {!! '┛' !!}
+                                {!! out_if_true(true, '<span class="badge badge-secondary">TAIL</span>') !!}
                             </div>
                         @endif
 
