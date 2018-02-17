@@ -153,7 +153,7 @@
                         @endcomponent
 
                         @component('parts.inline-form-component',['name' => 'leaf_id', 'label' => '元の葉'])
-                            {{ Form::select('leaf_id', \App\Models\Tree::selectPluck(), old('leaf_id'), ['class' => 'form-control']) }}
+                            {{ Form::select('leaf_id', \App\Models\Leaf::selectPluck(), old('leaf_id'), ['class' => 'form-control']) }}
                         @endcomponent
 
                         @component('parts.inline-form-component',['name' => 'tree_id', 'label' => '対象の木'])

@@ -16,7 +16,7 @@ class TreeGraftRequest extends FormRequest {
             'content'        => 'required_without:title|string|max:65535',
             'fruit_type_id'  => 'required|exists:fruit_types,id',
 
-            'leaf_id'        => 'required|exists:leafs,id',
+            'leaf_id'        => 'required|exists:leaves,id',
             'tree_id'        => 'required|exists:trees,id',
         ];
     }
