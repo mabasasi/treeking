@@ -44,7 +44,7 @@ class Sprig extends Model {
     }
 
     public function insertSprigs() {
-        return $this->hasMany('App\Models\Spring', 'origin_sprig_id');
+        return $this->hasMany('App\Models\Sprig', 'origin_sprig_id');
     }
 
     public function leaves() {
