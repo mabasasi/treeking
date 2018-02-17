@@ -70,18 +70,19 @@ class Sprig extends Model {
 
     /**
      * この sprig から leaf を生やす.
-     * @param string $content leaf の内容
-     * @param int $leafTypeId leaf の種別
-     * @param string|null $revision leaf のバージョン (管理用)
+     * @param array $params leaf のパラメタ (leaf_type_id, revision=null, content)
      * @return Leaf 作成した leaf
+     * @throws \Illuminate\Validation\ValidationException leaf のバリデーション失敗
      */
-    public function bearMethod(string $content, int $leafTypeId, string $revision = null) {
+    public function bearMethod(array $params) {
+        \Validator::make($params, [
+            'leaf_type_id' => 'required|exists:leaf_types,id',
+            'revision'     => 'nullable|string|max:255',
+            'content'      => 'required|string|max:65535',
+        ])->validate();
+
         // 自身の 枝 を基準に新たに 葉 を作る
-        $newLeaf = Leaf::create([
-            'leaf_type_id' => $leafTypeId,
-            'revision'     => $revision,
-            'content'      => $content,
-        ]);
+        $newLeaf = Leaf::create($params);
 
         // 自身が参照する 葉 を変更する
         $this->fill([

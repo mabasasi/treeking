@@ -94,4 +94,18 @@ class Branch extends Model {
         return $newSprig;
     }
 
+    /**
+     * [utility] この branch に sprig を生やし leaf を付ける.
+     * @param string $sprigName sprig の名前
+     * @param array $leafParams leaf のパラメタ (leaf_type_id, revision=null, content)
+     * @return Sprig 作成した sprig (leaf は sprig の current で取得)
+     * @throws \Illuminate\Validation\ValidationException leaf のバリデーション失敗
+     */
+    public function growWithBearMethod(string $sprigName, array $leafParams) {
+        $sprig = $this->growMethod($sprigName);
+        $leaf  = $sprig->bearMethod($leafParams);
+
+        return $sprig;
+    }
+
 }
