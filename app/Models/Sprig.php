@@ -1,0 +1,53 @@
+<?php
+
+namespace App\models;
+
+class Sprig extends Model {
+
+    protected $fillable = [
+        'name', 'branch_id', 'parent_sprig_id', 'origin_sprig_id', 'current_leaf_id'
+    ];
+
+    public function getIsRootAttribute() {
+        return ($this->parent_sprig_id == null and $this->origin_sprig_id == null);
+    }
+
+    public function getIsHeadAttribute() {
+        $sprig_id = optional($this->branch)->head_sprig_id;
+        return ($sprig_id === $this->id);
+    }
+
+    public function getIsTailAttribute() {
+        $sprig_id = optional($this->branch)->tail_sprig_id;
+        return ($sprig_id === $this->id);
+    }
+
+    public function branch() {
+        return $this->belongsTo('App\Models\Branch');
+    }
+
+    public function parentSprig() {
+        return $this->belongsTo('App\Models\Sprig', 'parent_sprig_id');
+    }
+
+    public function originSprig() {
+        return $this->belongsTo('App\Models\Sprig', 'origin_sprig_id');
+    }
+
+    public function childSprings() {
+        return $this->hasMany('App\Models\Sprig', 'parent_sprig_id');
+    }
+
+    public function insertSprings() {
+        return $this->hasMany('App\Models\Spring', 'origin_sprig_id');
+    }
+
+    public function leaves() {
+        return $this->hasMany('App\Models\Leaf');
+    }
+
+    public function currentLeave() {
+        return $this->belongsTo('App\Models\Leaf', 'current_leaf_id');
+    }
+
+}
