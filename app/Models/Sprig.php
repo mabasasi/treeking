@@ -82,6 +82,7 @@ class Sprig extends Model {
         ])->validate();
 
         // 自身の 枝 を基準に新たに 葉 を作る
+        $params['sprig_id'] = $this->id;
         $newLeaf = Leaf::create($params);
 
         // 自身が参照する 葉 を変更する
