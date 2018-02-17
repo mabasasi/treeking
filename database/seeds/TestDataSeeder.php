@@ -35,17 +35,17 @@ class TestDataSeeder extends Seeder
 
 
         // test grow and bear
-        $sprig_a = $branch_alpha->growWithBearMethod('A', [
+        $sprig_a = $branch_alpha->growAndBearMethod('A', [
             'content' => 'AAAAA',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $sprig_b = $branch_alpha->growWithBearMethod('B', [
+        $sprig_b = $branch_alpha->growAndBearMethod('B', [
             'content' => 'BBBBB',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $sprig_c = $branch_alpha->growWithBearMethod('C', [
+        $sprig_c = $branch_alpha->growAndBearMethod('C', [
             'content' => 'CCCCC',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
@@ -61,7 +61,7 @@ class TestDataSeeder extends Seeder
 
 
         // dummy
-        $sprig_d = $branch_alpha->growWithBearMethod('D', [
+        $sprig_d = $branch_alpha->growAndBearMethod('D', [
             'content' => 'DDDDD',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
@@ -71,7 +71,7 @@ class TestDataSeeder extends Seeder
         // test ramify
         $branch_beta = $sprig_d->ramifyMethod('BRANCH_BRAVO');
 
-        $sprig_e = $branch_beta->growWithBearMethod('E', [
+        $sprig_e = $branch_beta->growAndBearMethod('E', [
             'content' => 'EEEEE',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
@@ -81,12 +81,12 @@ class TestDataSeeder extends Seeder
         // TODO test plant
         $branch_charlie = Branch::create(['name' => 'BRANCH_CHARLIE']);
 
-        $sprig_f = $branch_charlie->growWithBearMethod('F', [
+        $sprig_f = $branch_charlie->growAndBearMethod('F', [
             'content' => 'FFFFF',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $sprig_g = $branch_charlie->growWithBearMethod('G', [
+        $sprig_g = $branch_charlie->growAndBearMethod('G', [
             'content' => 'GGGGG',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
@@ -112,12 +112,12 @@ class TestDataSeeder extends Seeder
 
 
         // dummy
-        $sprig_j = $branch_alpha->growWithBearMethod('J', [
+        $sprig_j = $branch_alpha->growAndBearMethod('J', [
             'content' => 'JJJJJ',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $sprig_k = $branch_charlie->growWithBearMethod('K', [
+        $sprig_k = $branch_charlie->growAndBearMethod('K', [
             'content' => 'KKKKK',
             'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);

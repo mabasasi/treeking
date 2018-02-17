@@ -13,7 +13,7 @@ class TreeGrowRequest extends FormRequest {
     public function rules() {
         return [
             'branch_id' => 'required|exists:branches,id',
-            'name'      => 'required_without:content|string|max:255',
+            'name'      => 'required:content|string|max:255',
         ];
     }
 

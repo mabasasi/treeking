@@ -112,7 +112,7 @@ class Branch extends Model {
      * @return Sprig 作成した sprig (leaf は sprig の current で取得)
      * @throws \Illuminate\Validation\ValidationException leaf のバリデーション失敗
      */
-    public function growWithBearMethod(string $sprigName, array $leafParams) {
+    public function growAndBearMethod(string $sprigName, array $leafParams) {
         $sprig = $this->growMethod($sprigName);
         $leaf  = $sprig->bearMethod($leafParams);
 

@@ -18,4 +18,13 @@ class Model extends \Illuminate\Database\Eloquent\Model {
     use SearchQueryTrait;
     use SelectBoxArrayTrait;
     use SoftDeletes;
+
+    public function scopeUpdateNewer($query) {
+        return $query->orderBy($this->getUpdatedAtColumn(), 'DESC');
+    }
+
+    public function scopeUpdateOlder($query) {
+        return $query->orderBy($this->getUpdatedAtColumn(), 'ASC');
+    }
+
 }

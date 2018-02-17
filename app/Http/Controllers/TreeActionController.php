@@ -40,6 +40,19 @@ class TreeActionController extends Controller {
         return back();
     }
 
+    public function growAndBear($request) {
+        \DB::transaction(function() use ($request) {
+            $branch = Branch::findOrFail($request->get('branch_id'));
+            $sprig = $branch->growAndBearMethod($request->get('sprig_name'), [
+                'leaf_type_id' => $request->get('leaf_type_id'),
+                'revision'     => $request->get('revision'),
+                'content'      => $request->get('content'),
+            ]);
+        });
+
+        return back();
+    }
+
     public function plant(TreePlantRequest $request) {
         \DB::transaction(function() use ($request) {
             $branch = Branch::create(['name' => $request['name']]);
