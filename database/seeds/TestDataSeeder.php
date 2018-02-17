@@ -14,6 +14,7 @@ class TestDataSeeder extends Seeder
      *
      * @return void
      * @throws \Illuminate\Validation\ValidationException
+     * @throws \App\Exceptions\TreeCreateException
      */
     public function run() {
         // 全部消す！

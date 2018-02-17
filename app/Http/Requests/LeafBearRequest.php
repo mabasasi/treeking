@@ -12,10 +12,10 @@ class LeafBearRequest extends FormRequest {
 
     public function rules() {
         return [
-            'title'         => 'required_without:content|string|max:255',
-            'content'       => 'required_without:title|string|max:65535',
-            'fruit_type_id' => 'required|exists:fruit_types,id',
-            'leaf_id'       => 'required|exists:leaves,id',
+            'sprig_id'     => 'required|exists:sprigs,id',
+            'leaf_type_id' => 'required|exists:leaf_types,id',
+            'revision'     => 'nullable|string|max:255',
+            'content'      => 'required|string|max:65535',
         ];
     }
 

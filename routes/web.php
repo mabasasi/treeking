@@ -21,8 +21,8 @@ Route::get('/home', 'TestController')->name('test');
 Route::get('/debug/seed',  'DebugController@dbSeed')->name('debug.seed');
 Route::get('/debug/fresh', 'DebugController@dbMigrationFresh')->name('debug.fresh');
 
-Route::post('/action/grow',   'TreeActionController@growTree')->name('action.tree.grow');
-Route::post('/action/bear',   'TreeActionController@bearLeaf')->name('action.leaf.bear');
-Route::post('/action/plant',  'TreeActionController@plantTree')->name('action.tree.plant');
-Route::post('/action/branch', 'TreeActionController@branchLeaf')->name('action.leaf.branch');
-Route::post('/action/graft',  'TreeActionController@graftTree')->name('action.leaf.graft');
+Route::post('/action/grow',   'TreeActionController@grow')->name('action.tree.grow');
+Route::post('/action/bear',   'TreeActionController@bear')->name('action.leaf.bear');
+Route::post('/action/plant',  'TreeActionController@plant')->name('action.tree.plant');
+Route::post('/action/ramify', 'TreeActionController@ramify')->name('action.leaf.ramify');
+Route::post('/action/graft',  'TreeActionController@graft')->name('action.leaf.graft');

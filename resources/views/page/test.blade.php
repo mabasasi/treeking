@@ -18,8 +18,8 @@
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#plant-collapse" aria-expanded="false" aria-controls="plant-collapse">
                             <span class="octicon octicon-plus"></span> PLANT
                         </button>
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#branch-collapse" aria-expanded="false" aria-controls="branch-collapse">
-                            <span class="octicon octicon-git-branch"></span> BRANCH
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#ramify-collapse" aria-expanded="false" aria-controls="ramify-collapse">
+                            <span class="octicon octicon-git-branch"></span> RAMIFY
                         </button>
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#graft-collapse" aria-expanded="false" aria-controls="graft-collapse">
                             <span class="octicon octicon-git-pull-request"></span> GRAFT
@@ -32,144 +32,127 @@
                         </div>
                     </div>
 
-                    {{--<div class="collapse" id="grow-collapse">--}}
-                        {{--<hr>--}}
+                    <div class="collapse" id="grow-collapse">
+                        <hr>
 
-                        {{--<h4>木の成長[grow]</h4>--}}
-                        {{--<p>木の先端に リーフ と フルーツ を生やします.</p>--}}
-                        {{--{{ Form::open(['method' => 'POST', 'url' => route('action.tree.grow')]) }}--}}
+                        <h4>GROW</h4>
+                        <p>幹 の先端から 枝 を伸ばす.</p>
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.tree.grow')]) }}
 
-                        {{--@component('parts.inline-form-component',['name' => 'title', 'label' => 'タイトル'])--}}
-                            {{--{{ Form::text('title', old('title'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                        @component('parts.inline-form-component',['name' => 'branch_id', 'label' => '対象の 幹'])
+                            {{ Form::select('branch_id', \App\Models\Branch::selectPluck(), old('branch_id'), ['class' => 'form-control']) }}
+                        @endcomponent
 
-                        {{--@component('parts.inline-form-component',['name' => 'content', 'label' => '内容'])--}}
-                            {{--{{ Form::textarea('content', old('content'), ['class' => 'form-control', 'size' => '10x3']) }}--}}
-                        {{--@endcomponent--}}
+                        @component('parts.inline-form-component',['name' => 'name', 'label' => '葉 の名前'])
+                            {{ Form::text('name', old('name'), ['class' => 'form-control']) }}
+                        @endcomponent
 
-                        {{--@component('parts.inline-form-component',['name' => 'fruit_type_id', 'label' => '種類'])--}}
-                            {{--{{ Form::select('fruit_type_id', \App\Models\FruitType::selectPluck(), old('fruit_type_id'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-4">
+                                {{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}
+                            </div>
+                        </div>
+                        {{ Form::close() }}
+                    </div>
 
-                        {{--@component('parts.inline-form-component',['name' => 'tree_id', 'label' => '対象の木'])--}}
-                            {{--{{ Form::select('tree_id', \App\Models\Tree::selectPluck(), old('tree_id'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                    <div class="collapse" id="bear-collapse">
+                        <hr>
 
-                        {{--<div class="row justify-content-md-center">--}}
-                            {{--<div class="col-sm-4">--}}
-                                {{--{{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--{{ Form::close() }}--}}
-                    {{--</div>--}}
+                        <h4>BEAR</h4>
+                        <p>枝 に 葉 を付ける.</p>
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.leaf.bear')]) }}
 
-                    {{--<div class="collapse" id="bear-collapse">--}}
-                        {{--<hr>--}}
+                        @component('parts.inline-form-component',['name' => 'sprig_id', 'label' => '対象の 葉'])
+                            {{ Form::select('sprig_id', \App\Models\Sprig::selectPluck(), old('sprig_id'), ['class' => 'form-control']) }}
+                        @endcomponent
 
-                        {{--<h4>実を付ける[bear]</h4>--}}
-                        {{--<p>葉に新たな実をつける.</p>--}}
-                        {{--{{ Form::open(['method' => 'POST', 'url' => route('action.leaf.bear')]) }}--}}
+                        @component('parts.inline-form-component',['name' => 'leaf_type_id', 'label' => '葉 の種類'])
+                            {{ Form::select('leaf_type_id', \App\Models\LeafType::selectPluck(), old('leaf_type_id'), ['class' => 'form-control']) }}
+                        @endcomponent
 
-                        {{--@component('parts.inline-form-component',['name' => 'title', 'label' => 'タイトル'])--}}
-                            {{--{{ Form::text('title', old('title'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                        @component('parts.inline-form-component',['name' => 'revision', 'label' => 'リビジョン'])
+                            {{ Form::text('revision', old('revision'), ['class' => 'form-control']) }}
+                        @endcomponent
 
-                        {{--@component('parts.inline-form-component',['name' => 'content', 'label' => '内容'])--}}
-                            {{--{{ Form::textarea('content', old('content'), ['class' => 'form-control', 'size' => '10x3']) }}--}}
-                        {{--@endcomponent--}}
+                        @component('parts.inline-form-component',['name' => 'content', 'label' => '内容'])
+                            {{ Form::textarea('content', old('content'), ['class' => 'form-control', 'size' => '10x3']) }}
+                        @endcomponent
 
-                        {{--@component('parts.inline-form-component',['name' => 'fruit_type_id', 'label' => '種類'])--}}
-                            {{--{{ Form::select('fruit_type_id', \App\Models\FruitType::selectPluck(), old('fruit_type_id'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-4">
+                                {{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}
+                            </div>
+                        </div>
+                        {{ Form::close() }}
+                    </div>
 
-                        {{--@component('parts.inline-form-component',['name' => 'leaf_id', 'label' => '対象の葉'])--}}
-                            {{--{{ Form::select('leaf_id', \App\Models\Leaf::selectPluck(), old('leaf_id'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                    <div class="collapse" id="plant-collapse">
+                        <hr>
 
-                        {{--<div class="row justify-content-md-center">--}}
-                            {{--<div class="col-sm-4">--}}
-                                {{--{{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--{{ Form::close() }}--}}
-                    {{--</div>--}}
+                        <h4>PLANT</h4>
+                        <p>新たに 幹 を作る.</p>
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.tree.plant')]) }}
 
-                    {{--<div class="collapse" id="plant-collapse">--}}
-                        {{--<hr>--}}
+                        @component('parts.inline-form-component',['name' => 'name', 'label' => '幹 の名前'])
+                            {{ Form::text('name', old('name'), ['class' => 'form-control']) }}
+                        @endcomponent
 
-                        {{--<h4>木を植える[PLANT]</h4>--}}
-                        {{--<p>新たな木を作る.</p>--}}
-                        {{--{{ Form::open(['method' => 'POST', 'url' => route('action.tree.plant')]) }}--}}
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-4">
+                                {{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}
+                            </div>
+                        </div>
+                        {{ Form::close() }}
+                    </div>
 
-                        {{--@component('parts.inline-form-component',['name' => 'name', 'label' => '木の名前'])--}}
-                            {{--{{ Form::text('name', old('name'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                    <div class="collapse" id="ramify-collapse">
+                        <hr>
 
-                        {{--<div class="row justify-content-md-center">--}}
-                            {{--<div class="col-sm-4">--}}
-                                {{--{{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--{{ Form::close() }}--}}
-                    {{--</div>--}}
+                        <h4>RAMIFY</h4>
+                        <p>枝 を分岐させて新たな 幹 を作る.</p>
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.leaf.ramify')]) }}
 
-                    {{--<div class="collapse" id="branch-collapse">--}}
-                        {{--<hr>--}}
+                        @component('parts.inline-form-component',['name' => 'sprig_id', 'label' => '対象の 枝'])
+                            {{ Form::select('sprig_id', \App\Models\Sprig::selectPluck(), old('sprig_id'), ['class' => 'form-control']) }}
+                        @endcomponent
 
-                        {{--<h4>葉を移植する[BRANCH]</h4>--}}
-                        {{--<p>リーフを別の木へ接続する.</p>--}}
-                        {{--{{ Form::open(['method' => 'POST', 'url' => route('action.leaf.branch')]) }}--}}
+                        @component('parts.inline-form-component',['name' => 'name', 'label' => '幹 の名前'])
+                            {{ Form::text('name', old('name'), ['class' => 'form-control']) }}
+                        @endcomponent
 
-                        {{--@component('parts.inline-form-component',['name' => 'tree_name', 'label' => '木の名前'])--}}
-                            {{--{{ Form::text('tree_name', old('tree_name'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                        <div class="row justify-content-md-center">
+                            <div class="col-sm-4">
+                                {{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}
+                            </div>
+                        </div>
+                        {{ Form::close() }}
+                    </div>
 
-                        {{--@component('parts.inline-form-component',['name' => 'leaf_id', 'label' => '対象の葉'])--}}
-                            {{--{{ Form::select('leaf_id', \App\Models\Leaf::selectPluck(), old('leaf_id'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
+                    <div class="collapse" id="graft-collapse">
+                        <hr>
 
-                        {{--<div class="row justify-content-md-center">--}}
-                            {{--<div class="col-sm-4">--}}
-                                {{--{{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--{{ Form::close() }}--}}
-                    {{--</div>--}}
+                        <h4>GRAFT</h4>
+                        <p>幹 をまとめて 別の幹へ枝を生やす.</p>
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.leaf.graft')]) }}
+                            @component('parts.inline-form-component',['name' => 'sprig_id', 'label' => '元の 枝'])
+                                {{ Form::select('sprig_id', \App\Models\Sprig::selectPluck(), old('leaf_id'), ['class' => 'form-control']) }}
+                            @endcomponent
 
-                    {{--<div class="collapse" id="graft-collapse">--}}
-                        {{--<hr>--}}
+                            @component('parts.inline-form-component',['name' => 'branch_id', 'label' => '対象の 幹'])
+                                {{ Form::select('branch_id', \App\Models\Branch::selectPluck(), old('tree_id'), ['class' => 'form-control']) }}
+                            @endcomponent
 
-                        {{--<h4>(葉をまとめて)別の木へ刺す[GRAFT]</h4>--}}
-                        {{--<p>リーフを別の木へ接続する.</p>--}}
-                        {{--{{ Form::open(['method' => 'POST', 'url' => route('action.leaf.graft')]) }}--}}
+                            @component('parts.inline-form-component',['name' => 'name', 'label' => '新たな 枝 の名前'])
+                                {{ Form::text('name', old('name'), ['class' => 'form-control']) }}
+                            @endcomponent
 
-                        {{--@component('parts.inline-form-component',['name' => 'title', 'label' => 'タイトル'])--}}
-                            {{--{{ Form::text('title', old('title'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
-
-                        {{--@component('parts.inline-form-component',['name' => 'content', 'label' => '内容'])--}}
-                            {{--{{ Form::textarea('content', old('content'), ['class' => 'form-control', 'size' => '10x3']) }}--}}
-                        {{--@endcomponent--}}
-
-                        {{--@component('parts.inline-form-component',['name' => 'fruit_type_id', 'label' => '種類'])--}}
-                            {{--{{ Form::select('fruit_type_id', \App\Models\FruitType::selectPluck(), old('fruit_type_id'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
-
-                        {{--@component('parts.inline-form-component',['name' => 'leaf_id', 'label' => '元の葉'])--}}
-                            {{--{{ Form::select('leaf_id', \App\Models\Leaf::selectPluck(), old('leaf_id'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
-
-                        {{--@component('parts.inline-form-component',['name' => 'tree_id', 'label' => '対象の木'])--}}
-                            {{--{{ Form::select('tree_id', \App\Models\Tree::selectPluck(), old('tree_id'), ['class' => 'form-control']) }}--}}
-                        {{--@endcomponent--}}
-
-                        {{--<div class="row justify-content-md-center">--}}
-                            {{--<div class="col-sm-4">--}}
-                                {{--{{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}--}}
-                            {{--</div>--}}
-                        {{--</div>--}}
-                        {{--{{ Form::close() }}--}}
-                    {{--</div>--}}
+                            <div class="row justify-content-md-center">
+                                <div class="col-sm-4">
+                                    {{ Form::submit('作成', ['class' => 'btn btn-block btn-primary']) }}
+                                </div>
+                            </div>
+                        {{ Form::close() }}
+                    </div>
 
                 </div>
 
@@ -232,7 +215,7 @@
 
                         ----------<br>
                     @endforeach
-                    
+
                 </div>
 
             </div>
