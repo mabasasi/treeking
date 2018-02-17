@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col" style="background: lightgoldenrodyellow;">
 
-        {{ Form::open(['method' => 'POST', 'url' => route('action.tree.growAndBear')]) }}
+        {{ Form::open(['id' => 'create-form', 'method' => 'POST', 'url' => route('action.tree.growAndBear')]) }}
 
         @component('parts.general-card-component')
             @slot('header')
@@ -21,14 +21,14 @@
             @endcomponent
 
             {{--簡易ツールバー--}}
-            @component('parts.group-form-component',['name' => 'content', 'class' => 'mb-0'])
+            @component('parts.group-form-component',['class' => 'mb-0'])
 
                 <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target="#detail-collapse" aria-expanded="false" aria-controls="detail-collapse">
                     <i class="fas fa-caret-down"></i> 詳細
                 </button>
 
                 <div class="pull-right">
-                    {{ Form::submit('保存', ['class' => 'btn btn-success']) }}
+                    {{ Form::submit('保存 (Alt + Enter)', ['class' => 'btn btn-success']) }}
                 </div>
             @endcomponent
 
@@ -61,6 +61,18 @@
 
 @push('scripts')
 <script>
+
+    // alt + enter で 送信
+    $(window).keydown(function(e) {
+        if(e.altKey) {
+            if(e.keyCode === 13) {
+                $('#create-form').submit();
+                return false;
+            }
+        }
+    });
+
+    // ブランチ名更新
     $(document).on('change', '[name="branch_id"]', function() {
        var branch_name = $('[name=branch_id] option:selected').text();
         var dom = $('#branch-name');
@@ -68,5 +80,6 @@
             dom.text(branch_name).fadeIn();
         });
     });
+
 </script>
 @endpush

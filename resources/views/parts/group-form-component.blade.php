@@ -1,7 +1,10 @@
 
+{{--名前がない場合を処理--}}
+@php($name = isset($name) ? $name : null)
+
 {{--Laravel の Validation Error に最適化--}}
 @php($hasError  = count($errors) > 0)
-@php($thisError = $errors->has($name))
+@php($thisError = (!$name) ? false : $errors->has($name))
 
 <div class="form-group{{ isset($class) ? ' '.$class : '' }}">
     @isset($label)
