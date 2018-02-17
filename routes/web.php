@@ -22,3 +22,4 @@ Route::post('/action/grow',   'TreeActionController@growTree')->name('action.tre
 Route::post('/action/bear',   'TreeActionController@bearLeaf')->name('action.leaf.bear');
 Route::post('/action/plant',  'TreeActionController@plantTree')->name('action.tree.plant');
 Route::post('/action/branch', 'TreeActionController@branchLeaf')->name('action.leaf.branch');
+Route::post('/action/graft',  'TreeActionController@graftTree')->name('action.leaf.graft');
