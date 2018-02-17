@@ -57,7 +57,7 @@ class Sprig extends Model {
      * @return Branch 作成した branch
      */
     public function ramifyMethod(string $branchName) {
-        // 自身の 葉 を基準に新たに 幹 を作る
+        // 自身の 枝 を基準に新たに 幹 を作る
         $newBranch = Branch::create([
             'name'          => $branchName,
             'head_sprig_id' => $this->id,
@@ -65,6 +65,30 @@ class Sprig extends Model {
         ]);
 
         return $newBranch;
+    }
+
+
+    /**
+     * この sprig から leaf を生やす.
+     * @param string $content leaf の内容
+     * @param int $leafTypeId leaf の種別
+     * @param string|null $revision leaf のバージョン (管理用)
+     * @return Leaf 作成した leaf
+     */
+    public function bearMethod(string $content, int $leafTypeId, string $revision = null) {
+        // 自身の 枝 を基準に新たに 葉 を作る
+        $newLeaf = Leaf::create([
+            'leaf_type_id' => $leafTypeId,
+            'revision'     => $revision,
+            'content'      => $content,
+        ]);
+
+        // 自身が参照する 葉 を変更する
+        $this->fill([
+            'current_leaf_id' => $newLeaf->id,
+        ])->save();
+
+        return $newLeaf;
     }
 
 }
