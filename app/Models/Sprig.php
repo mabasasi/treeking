@@ -50,4 +50,21 @@ class Sprig extends Model {
         return $this->belongsTo('App\Models\Leaf', 'current_leaf_id');
     }
 
+
+    /**
+     * この sprig から branch を生やす.
+     * @param string $branchName 名前
+     * @return Branch 作成した branch
+     */
+    public function ramifyMethod(string $branchName) {
+        // 自身の 葉 を基準に新たに 幹 を作る
+        $newBranch = Branch::create([
+            'name'          => $branchName,
+            'head_sprig_id' => $this->id,
+            'tail_sprig_id' => $this->id,
+        ]);
+
+        return $newBranch;
+    }
+
 }
