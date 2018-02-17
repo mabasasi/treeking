@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
             return new DatabaseValidator($translator, $data, $rules, $messages);
         });
 
+        // TODO 消し忘れないように！
         \DB::enableQueryLog();
     }
 

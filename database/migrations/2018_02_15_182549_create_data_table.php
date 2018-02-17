@@ -14,43 +14,42 @@ class CreateDataTable extends Migration
     public function up()
     {
         // テーブル定義
-        Schema::create('fruit_types', function (Blueprint $table) {
+        Schema::create('leaf_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
-        });
 
-        Schema::create('fruits', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('leaf_id')->nullable(); // 所属する leaf
-
-            $table->unsignedInteger('fruit_type_id');       // fruit の種別
-            $table->string('revision')->nullable();         // fruit のバージョン情報(基本は数字、任意で文字列)
-            $table->string('title')->nullable();            // fruit の内容
-            $table->text('content')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
 
         Schema::create('leaves', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('tree_id')->nullable();             // 所属する tree
-            $table->unsignedInteger('parent_leaf_id')->nullable();      // 親の leaf
-            $table->unsignedInteger('origin_leaf_id')->nullable();      // マージ元の leaf
-
-            $table->unsignedInteger('current_fruit_id')->nullable();    // 現在の参照先の fruit
+            $table->unsignedInteger('sprig_id');        // 所属する 小枝
+            $table->unsignedInteger('leaf_type_id');    // 葉 の種類
+            $table->string('revision')->nullable();     // 葉 のバージョン情報 (基本は数字、任意で文字列)
+            $table->text('content')->nullable();        // 中身
 
             $table->timestamps();
             $table->softDeletes();
         });
 
-        Schema::create('trees', function (Blueprint $table) {
+        Schema::create('sprigs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');  // tree の名前
+            $table->string('name');                                     // 小枝 の名前
+            $table->unsignedInteger('branch_id')->nullable();           // 所属する 幹
+            $table->unsignedInteger('parent_sprig_id')->nullable();     // 親の 小枝
+            $table->unsignedInteger('origin_sprig_id')->nullable();     // 関連する親の 小枝 (ramify, graft 時)
+            $table->unsignedInteger('current_leaf_id')->nullable();     // 現在参照している 葉
 
-            $table->unsignedInteger('head_leaf_id')->nullable();    // tree 内の最新の leaf
-            $table->unsignedInteger('tail_leaf_id')->nullable();    // tree 内の一番下の leaf
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('branches', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');                                 // 幹 の名前
+            $table->unsignedInteger('head_sprig_id')->nullable();   // 幹 の最新の 枝
+            $table->unsignedInteger('tail_sprig_id')->nullable();   // 幹 の先頭の 枝
 
             $table->timestamps();
             $table->softDeletes();
@@ -59,19 +58,19 @@ class CreateDataTable extends Migration
 
 
         // リレーションの定義
-        Schema::table('fruits', function (Blueprint $table) {
-            $table->foreign('fruit_type_id')->references('id')->on('fruit_types');
-        });
-
         Schema::table('leaves', function (Blueprint $table) {
-            $table->foreign('parent_leaf_id')->references('id')->on('leaves');
-            $table->foreign('origin_leaf_id')->references('id')->on('leaves');
-            $table->foreign('current_fruit_id')->references('id')->on('fruits');
+            $table->foreign('leaf_type_id')->references('id')->on('leaf_types');
         });
 
-        Schema::table('trees', function (Blueprint $table) {
-            $table->foreign('head_leaf_id')->references('id')->on('leaves');
-            $table->foreign('tail_leaf_id')->references('id')->on('leaves');
+        Schema::table('sprigs', function (Blueprint $table) {
+            $table->foreign('parent_sprig_id')->references('id')->on('sprigs');
+            $table->foreign('origin_sprig_id')->references('id')->on('sprigs');
+            $table->foreign('current_leaf_id')->references('id')->on('leaves');
+        });
+
+        Schema::table('branches', function (Blueprint $table) {
+            $table->foreign('head_sprig_id')->references('id')->on('sprigs');
+            $table->foreign('tail_sprig_id')->references('id')->on('sprigs');
         });
     }
 
@@ -82,19 +81,19 @@ class CreateDataTable extends Migration
      */
     public function down()
     {
-        Schema::table('fruits', function (Blueprint $table) {
-            $table->dropForeign(['fruit_type_id']);
+        Schema::table('leaves', function (Blueprint $table) {
+            $table->dropForeign(['leaf_type_id']);
         });
-        Schema::table('leafs', function (Blueprint $table) {
-            $table->dropForeign(['parent_leaf_id', 'origin_leaf_id', 'current_fruit_id']);
+        Schema::table('sprigs', function (Blueprint $table) {
+            $table->dropForeign(['parent_sprig_id', 'origin_sprig_id', 'current_leaf_id']);
         });
-        Schema::table('trees', function (Blueprint $table) {
-            $table->dropForeign(['head_leaf_id', 'tail_leaf_id']);
+        Schema::table('branches', function (Blueprint $table) {
+            $table->dropForeign(['head_sprig_id', 'tail_sprig_id']);
         });
 
-        Schema::dropIfExists('trees');
+        Schema::dropIfExists('branches');
+        Schema::dropIfExists('sprigs');
         Schema::dropIfExists('leaves');
-        Schema::dropIfExists('fruit_types');
-        Schema::dropIfExists('fruits');
+        Schema::dropIfExists('leaf_types');
     }
 }

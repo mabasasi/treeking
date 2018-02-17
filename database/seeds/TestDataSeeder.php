@@ -2,10 +2,10 @@
 
 use Illuminate\Database\Seeder;
 use App\Consts;
-use App\Models\FruitType;
-use App\Models\Fruit;
+use App\Models\Branch;
+use App\Models\Sprig;
 use App\Models\Leaf;
-use App\Models\Tree;
+use App\Models\LeafType;
 
 class TestDataSeeder extends Seeder
 {
@@ -13,195 +13,114 @@ class TestDataSeeder extends Seeder
      * Run the database seeds.
      *
      * @return void
+     * @throws \Illuminate\Validation\ValidationException
+     * @throws \App\Exceptions\TreeCreateException
      */
     public function run() {
         // 全部消す！
         \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        Tree::truncate();
+        Branch::truncate();
+        Sprig::truncate();
         Leaf::truncate();
-        Fruit::truncate();
-        FruitType::truncate();
+        LeafType::truncate();
         \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-
-        FruitType::create(['id' => \App\Consts::FRUIT_TYPE_PLANE, 'name' => 'plane']);
-
-
-        $tree_x = Tree::create(['name' => 'Xの木']);
-        $tree_y = Tree::create(['name' => 'Yの木']);
+        // テストケースを作成する
+        LeafType::create(['id' => Consts::FRUIT_TYPE_PLANE, 'name' => '標準']);
 
 
-        $leaf_a = Leaf::create();
 
-        $fruit_a = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実A',
-            'content' => '実Aの中身です',
+        // TODO test plant
+        $branch_alpha = Branch::create(['name' => 'BRANCH_ALPHA']);
+
+
+        // test grow and bear
+        $sprig_a = $branch_alpha->growWithBearMethod('A', [
+            'content' => 'AAAAA',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_a->bearMethod($fruit_a);
-        $tree_x->growMethod($leaf_a);
-
-
-        ////////////////////////////////////////
-
-
-        $leaf_b = Leaf::create();
-
-        $fruit_b = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実B',
-            'content' => '実Bの中身です'
+        $sprig_b = $branch_alpha->growWithBearMethod('B', [
+            'content' => 'BBBBB',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_b->bearMethod($fruit_b);
-        $tree_x->growMethod($leaf_b);
-
-
-        $fruit_bb = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実B(修正版)',
-            'content' => '実Bの中身を変更しました'
+        $sprig_c = $branch_alpha->growWithBearMethod('C', [
+            'content' => 'CCCCC',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_b->bearMethod($fruit_bb);
 
 
-        ////////////////////////////////////////
-
-
-        $leaf_c = Leaf::create();
-
-        $fruit_c = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実C',
-            'content' => '実Cの中身です'
+        // test bear of leaf
+        $leaf_bb = $sprig_b->bearMethod([
+            'content' => 'modify B',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_c->bearMethod($fruit_c);
-        $tree_x->growMethod($leaf_c);
 
 
-        ////////////////////////////////////////
-
-
-        $leaf_d = Leaf::create();
-
-        $fruit_d = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実D',
-            'content' => '実Dの中身です',
+        // dummy
+        $sprig_d = $branch_alpha->growWithBearMethod('D', [
+            'content' => 'DDDDD',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_d->bearMethod($fruit_d);
-        $tree_y->growMethod($leaf_d);
 
 
-        ////////////////////////////////////////
+        // test ramify
+        $branch_beta = $sprig_d->ramifyMethod('BRANCH_BRAVO');
 
-
-        $leaf_e = Leaf::create();
-
-        $fruit_e = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実E',
-            'content' => '実Eの中身です'
+        $sprig_e = $branch_beta->growWithBearMethod('E', [
+            'content' => 'EEEEE',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_e->bearMethod($fruit_e);
-        $tree_y->growMethod($leaf_e);
 
 
-        ////////////////////////////////////////
+        // TODO test plant
+        $branch_charlie = Branch::create(['name' => 'BRANCH_CHARLIE']);
 
-
-        $leaf_f = Leaf::create();
-
-        $fruit_f = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実F',
-            'content' => '実Fの中身です'
+        $sprig_f = $branch_charlie->growWithBearMethod('F', [
+            'content' => 'FFFFF',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_f->bearMethod($fruit_f);
-        $tree_y->growMethod($leaf_f);
-
-
-        ////////////////////////////////////////
-
-
-        // grant test
-        $leaf_g = $tree_x->graftMethod($leaf_e);
-
-        $fruit_g = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実G',
-            'content' => '本当は D E のまとめを編集して載せる'
+        $sprig_g = $branch_charlie->growWithBearMethod('G', [
+            'content' => 'GGGGG',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_g->bearMethod($fruit_g);
 
 
-        ////////////////////////////////////////
-
-        $leaf_h = Leaf::create();
-
-        $fruit_h = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実H',
-            'content' => '実Hの中身です'
+        // test graft and bear
+        $sprig_h = $branch_beta->graftMethod('H', $sprig_g);
+        $sprig_h->bearMethod([
+            'content' => 'HHHHH  marge GG.',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_h->bearMethod($fruit_h);
-        $tree_x->growMethod($leaf_h);
 
 
-        ////////////////////////////////////////
-
-        $leaf_i = Leaf::create();
-
-        $fruit_i = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実I',
-            'content' => '実Iの中身です'
+        // test graft and bear
+        $sprig_i = $branch_alpha->graftMethod('I', $sprig_h);
+        $sprig_i->bearMethod([
+            'content' => 'IIIII  marge HH.',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_i->bearMethod($fruit_i);
-        $tree_x->growMethod($leaf_i);
 
 
-        ////////////////////////////////////////
-
-
-        // branch test
-        $tree_z = $leaf_h->branchMethod('Zの木');
-
-        ////////////////////////////////////////
-
-        $leaf_j = Leaf::create();
-
-        $fruit_j = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実J',
-            'content' => '実Jの中身です'
+        // dummy
+        $sprig_j = $branch_alpha->growWithBearMethod('J', [
+            'content' => 'JJJJJ',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
 
-        $leaf_j->bearMethod($fruit_j);
-        $tree_z->growMethod($leaf_j);
-
-
-        ////////////////////////////////////////
-
-        // grant test
-        $leaf_k = $tree_x->graftMethod($leaf_j);
-
-        $fruit_k = Fruit::create([
-            'fruit_type_id' => Consts::FRUIT_TYPE_PLANE,
-            'title' => '実K',
-            'content' => '本当は J のまとめを編集して載せる'
+        $sprig_k = $branch_charlie->growWithBearMethod('K', [
+            'content' => 'KKKKK',
+            'leaf_type_id' => Consts::FRUIT_TYPE_PLANE,
         ]);
-
-        $leaf_k->bearMethod($fruit_k);
 
     }
 
