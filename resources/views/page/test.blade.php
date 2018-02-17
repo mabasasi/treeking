@@ -60,7 +60,7 @@
 
                         <h4>BEAR</h4>
                         <p>枝 に 葉 を付ける.</p>
-                        {{ Form::open(['method' => 'POST', 'url' => route('action.leaf.bear')]) }}
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.tree.bear')]) }}
 
                         @component('parts.inline-form-component',['name' => 'sprig_id', 'label' => '対象の 葉'])
                             {{ Form::select('sprig_id', \App\Models\Sprig::selectPluck(), old('sprig_id'), ['class' => 'form-control']) }}
@@ -110,7 +110,7 @@
 
                         <h4>RAMIFY</h4>
                         <p>枝 を分岐させて新たな 幹 を作る.</p>
-                        {{ Form::open(['method' => 'POST', 'url' => route('action.leaf.ramify')]) }}
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.tree.ramify')]) }}
 
                         @component('parts.inline-form-component',['name' => 'sprig_id', 'label' => '対象の 枝'])
                             {{ Form::select('sprig_id', \App\Models\Sprig::selectPluck(), old('sprig_id'), ['class' => 'form-control']) }}
@@ -133,7 +133,7 @@
 
                         <h4>GRAFT</h4>
                         <p>幹 をまとめて 別の幹へ枝を生やす.</p>
-                        {{ Form::open(['method' => 'POST', 'url' => route('action.leaf.graft')]) }}
+                        {{ Form::open(['method' => 'POST', 'url' => route('action.tree.graft')]) }}
                             @component('parts.inline-form-component',['name' => 'sprig_id', 'label' => '元の 枝'])
                                 {{ Form::select('sprig_id', \App\Models\Sprig::selectPluck(), old('leaf_id'), ['class' => 'form-control']) }}
                             @endcomponent

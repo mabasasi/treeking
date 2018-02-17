@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LeafBranchRequest extends FormRequest {
+class TreeRamifyRequest extends FormRequest {
 
     public function authorize() {
         return true;

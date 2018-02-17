@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LeafBearRequest;
 use App\Http\Requests\LeafBranchRequest;
+use App\Http\Requests\TreeBearRequest;
 use App\Http\Requests\TreeGraftRequest;
 use App\Http\Requests\TreeGrowRequest;
 use App\Http\Requests\TreePlantRequest;
+use App\Http\Requests\TreeRamifyRequest;
 use App\models\Branch;
 use App\Models\Fruit;
 use App\Models\Leaf;
@@ -25,7 +27,7 @@ class TreeActionController extends Controller {
         return back();
     }
 
-    public function bear(LeafBearRequest $request) {
+    public function bear(TreeBearRequest $request) {
         \DB::transaction(function() use ($request) {
             $sprig = Sprig::findOrFail($request->get('sprig_id'));
             $sprig->bearMethod([
@@ -46,7 +48,7 @@ class TreeActionController extends Controller {
         return back();
     }
 
-    public function ramify(LeafBranchRequest $request) {
+    public function ramify(TreeRamifyRequest $request) {
         \DB::transaction(function() use ($request) {
             $sprig = Sprig::findOrFail($request->get('sprig_id'));
             $sprig->ramifyMethod($request->get('name'));

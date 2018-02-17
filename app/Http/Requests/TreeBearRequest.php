@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LeafBearRequest extends FormRequest {
+class TreeBearRequest extends FormRequest {
 
     public function authorize() {
         return true;
