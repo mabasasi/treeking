@@ -9,7 +9,7 @@
         <!-- Left Element -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('test') }}">テスト</a>
+                <a class="nav-link" href="{{ route('test') }}">テストページ</a>
             </li>
 
             {{--<li class="nav-item active">--}}

@@ -9,9 +9,6 @@
                 <div class="card card-body margin">
 
                     <div>
-                        <a class="btn btn-outline-primary" href="{{ route('test') }}">更新</a>
-                        <a class="btn btn-outline-danger" href="{{ route('test', ['seed' => 'true']) }}">データごと更新</a>
-
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#grow-collapse" aria-expanded="false" aria-controls="grow-collapse">
                             GROW <i class="fas fa-caret-down"></i>
                         </button>
@@ -27,6 +24,12 @@
                         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#graft-collapse" aria-expanded="false" aria-controls="graft-collapse">
                             GRAFT <i class="fas fa-caret-down"></i>
                         </button>
+
+                        <div class="float-right">
+                            <a class="btn btn-outline-primary" href="{{ route('test') }}">更新</a>
+                            <a class="btn btn-outline-warning" href="{{ route('test', ['seed' => 'true']) }}">DB構築</a>
+                            <a class="btn btn-outline-danger"  href="{{ route('test', ['seed' => 'true']) }}">初期化</a>
+                        </div>
                     </div>
 
                     <div class="collapse" id="grow-collapse">
