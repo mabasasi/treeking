@@ -3,73 +3,73 @@
     <div class="col">
 
         <div id="gitGraph" class="git-graph">
-            @foreach($sprigs as $sprig)
+            {{--@foreach($sprigs as $sprig)--}}
 
-                @component('parts.general-card-component', ['class' => 'git-node'])
-                    @slot('header')
-                        {{ $sprig->name ?? 'no' }}
-                    @endSlot
-                        {{ $sprig->currentLeave->content }}
-                @endcomponent
+                {{--@component('parts.general-card-component', ['class' => 'git-node'])--}}
+                    {{--@slot('header')--}}
+                        {{--{{ $sprig->name ?? 'no' }}--}}
+                    {{--@endSlot--}}
+                        {{--{{ $sprig->currentLeave->content }}--}}
+                {{--@endcomponent--}}
 
-                <div class="row mb-2">
-                    <div class="col-1">
-                        <div class="git-icon">
-                            @if($sprig->has_origin)
+                {{--<div class="row mb-2">--}}
+                    {{--<div class="col-1">--}}
+                        {{--<div class="git-icon">--}}
+                            {{--@if($sprig->has_origin)--}}
                                 {{--origin--}}
-                                <span class="icon-node-top"></span>
-                                <span class="icon-node-bottom"></span>
-                                <span class="icon-node-graft"></span>
-                                <span class="icon-circle"></span>
+                                {{--<span class="icon-node-top"></span>--}}
+                                {{--<span class="icon-node-bottom"></span>--}}
+                                {{--<span class="icon-node-graft"></span>--}}
+                                {{--<span class="icon-circle"></span>--}}
 
-                            @elseif($sprig->has_insert)
+                            {{--@elseif($sprig->has_insert)--}}
 
                                 {{--insert--}}
-                                <span class="icon-node-top"></span>
-                                <span class="icon-node-bottom"></span>
-                                <span class="icon-node-ramify"></span>
-                                <span class="icon-circle"></span>
-                            @elseif($sprig->is_tail)
+                                {{--<span class="icon-node-top"></span>--}}
+                                {{--<span class="icon-node-bottom"></span>--}}
+                                {{--<span class="icon-node-ramify"></span>--}}
+                                {{--<span class="icon-circle"></span>--}}
+                            {{--@elseif($sprig->is_tail)--}}
 
                                 {{--tail--}}
-                                <span class="icon-node-top"></span>
-                                <span class="icon-circle"></span>
-                            @else
+                                {{--<span class="icon-node-top"></span>--}}
+                                {{--<span class="icon-circle"></span>--}}
+                            {{--@else--}}
 
                                 {{--default--}}
-                                <span class="icon-node-top"></span>
-                                <span class="icon-node-bottom"></span>
-                            @endIf
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="git-content">
-                            @if($sprig->originSprig)
-                                @php ($origin = $sprig->originSprig)
-                                <a class="btn btn-under-animation mr-1" href="{{ route('treeking.index', ['branch_id' => $origin->branch_id, 'sprig_id' => $sprig->id]) }}">
-                                    <i class="fas fa-angle-double-right"></i>&nbsp;&nbsp;{{ optional($origin->branch)->name ?? 'unknown' }} から統合
-                                </a>
-                                <small>
-                                    {{ $origin->name }}
-                                </small>
-                            @elseif(optional($sprig->insertSprigs)->count())
-                                @php ($insert = $sprig->insertSprigs->first())
-                                <a class="btn btn-under-animation mr-1" href="{{ route('treeking.index', ['branch_id' => $insert->branch_id, 'sprig_id' => $insert->id]) }}">
-                                    <i class="fas fa-angle-double-left"></i>&nbsp;&nbsp;{{ optional($insert->branch)->name ?? 'unknown' }} へ分岐
-                                </a>
-                                <small>
-                                    {{ $insert->name }}
-                                </small>
-                            @elseif($sprig->is_tail)
-                                <small class="btn">
-                                    <i class="fas fa-plus"></i>&nbsp;&nbsp;{{ optional($sprig->branch)->created_at }} に作成
-                                </small>
-                            @endIf
-                        </div>
-                    </div>
-                </div>
+                                {{--<span class="icon-node-top"></span>--}}
+                                {{--<span class="icon-node-bottom"></span>--}}
+                            {{--@endIf--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                    {{--<div class="col">--}}
+                        {{--<div class="git-content">--}}
+                            {{--@if($sprig->originSprig)--}}
+                                {{--@php ($origin = $sprig->originSprig)--}}
+                                {{--<a class="btn btn-under-animation mr-1" href="{{ route('treeking.index', ['branch_id' => $origin->branch_id, 'sprig_id' => $sprig->id]) }}">--}}
+                                    {{--<i class="fas fa-angle-double-right"></i>&nbsp;&nbsp;{{ optional($origin->branch)->name ?? 'unknown' }} から統合--}}
+                                {{--</a>--}}
+                                {{--<small>--}}
+                                    {{--{{ $origin->name }}--}}
+                                {{--</small>--}}
+                            {{--@elseif(optional($sprig->insertSprigs)->count())--}}
+                                {{--@php ($insert = $sprig->insertSprigs->first())--}}
+                                {{--<a class="btn btn-under-animation mr-1" href="{{ route('treeking.index', ['branch_id' => $insert->branch_id, 'sprig_id' => $insert->id]) }}">--}}
+                                    {{--<i class="fas fa-angle-double-left"></i>&nbsp;&nbsp;{{ optional($insert->branch)->name ?? 'unknown' }} へ分岐--}}
+                                {{--</a>--}}
+                                {{--<small>--}}
+                                    {{--{{ $insert->name }}--}}
+                                {{--</small>--}}
+                            {{--@elseif($sprig->is_tail)--}}
+                                {{--<small class="btn">--}}
+                                    {{--<i class="fas fa-plus"></i>&nbsp;&nbsp;{{ optional($sprig->branch)->created_at }} に作成--}}
+                                {{--</small>--}}
+                            {{--@endIf--}}
+                        {{--</div>--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
-            @endforeach
+            {{--@endforeach--}}
         </div>
 
     </div>

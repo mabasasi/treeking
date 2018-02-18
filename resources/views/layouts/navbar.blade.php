@@ -23,8 +23,11 @@
         <ul class="navbar-nav">
             <li class="nav-item">
                 <span class="navbar-text">
-                    branch: {{ git_branch() ?? 'none' }},&nbsp;
-                    env: {{ \Config::get('app.env') }} - {{ \Config::get('app.debug') == 'true' ? 'debug' : '' }}
+                    @auth
+                        branch: {{ optional(\Auth::user()->currentBranch)->name ?? '-' }},&nbsp;&nbsp;
+                    @endauth
+                    git: {{ git_branch() ?? 'none' }},&nbsp;&nbsp;
+                    env: {{ \Config::get('app.env') }} - {{ \Config::get('app.debug') == 'true' ? 'debug' : '' }}&nbsp;&nbsp;
                 </span>
             </li>
 

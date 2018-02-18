@@ -9,7 +9,7 @@
                 めもる！
                 <div class="pull-right">
                     <span id="branch-name" class="text-secondary">
-                        {{ optional(\App\models\Branch::ifRequestWhere('branch_id', ['id'])->updatedNewer()->first())->name ?? 'Nothing.' }}
+                        {{ optional($branch)->name ?? 'Nothing.' }}
                     </span>
                 </div>
             @endslot
@@ -37,7 +37,7 @@
                 <hr>
 
                 @component('parts.inline-form-component',['name' => 'branch_id', 'label' => '対象の 幹'])
-                    {{ Form::select('branch_id', \App\Models\Branch::selectPluck(), old('branch_id'), ['class' => 'form-control']) }}
+                    {{ Form::select('branch_id', \App\Models\Branch::selectPluck(), old('branch_id', optional($branch)->id), ['class' => 'form-control']) }}
                 @endcomponent
 
                 @component('parts.inline-form-component',['name' => 'revision', 'label' => 'リビジョン'])

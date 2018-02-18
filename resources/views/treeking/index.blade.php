@@ -7,5 +7,5 @@
 
     <hr>
 
-    @include('treeking.widget-tree', ['sprigs' => $sprigs])
+    @include('treeking.widget-tree', ['branch' => $branch])
 @endsection
