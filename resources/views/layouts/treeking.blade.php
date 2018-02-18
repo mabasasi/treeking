@@ -10,7 +10,15 @@
     @endif
 
     <!-- Main Content -->
-    @yield('content')
+    @if (View::hasSection('container'))
+        <div class="@yield('container')">
+            @yield('content')
+        </div>
+    @else
+        <div class="container">
+            @yield('content')
+        </div>
+    @endif
 @endsection
 
 

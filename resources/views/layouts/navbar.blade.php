@@ -11,6 +11,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('test') }}">テストページ</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('treeking.index') }}">めも帳</a>
+            </li>
 
             {{--<li class="nav-item active">--}}
                 {{--<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>--}}
@@ -36,6 +39,7 @@
 
         <!-- Right Element -->
         <span class="navbar-text">
+            branch: {{ git_branch() ?? 'none' }},&nbsp;
             env: {{ \Config::get('app.env') }} - {{ \Config::get('app.debug') == 'true' ? 'debug' : '' }}
         </span>
 

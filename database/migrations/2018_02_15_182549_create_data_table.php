@@ -35,7 +35,7 @@ class CreateDataTable extends Migration
 
         Schema::create('sprigs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');                                     // 小枝 の名前
+            $table->string('name')->nullable();                         // 小枝 の名前 (タイトルだからなくでもok)
             $table->unsignedInteger('branch_id')->nullable();           // 所属する 幹
             $table->unsignedInteger('parent_sprig_id')->nullable();     // 親の 小枝
             $table->unsignedInteger('origin_sprig_id')->nullable();     // 関連する親の 小枝 (ramify, graft 時)
