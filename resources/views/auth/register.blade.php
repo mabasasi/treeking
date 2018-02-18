@@ -1,77 +1,76 @@
-@extends('layouts.app')
+@extends('layouts.treeking')
+@section('title', '新規登録')
 
 @section('content')
-<div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+        <div class="col-md-8 offset-md-2">
 
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('register') }}">
-                        {{ csrf_field() }}
+            @component('parts.general-card-component')
+                @slot('header')
+                    {{ config('app.name', 'Laravel') }}&nbsp;&nbsp;新規登録
+                @endslot
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                            <label for="name" class="col-md-4 control-label">Name</label>
+                {{ Form::open(['id' => 'register-form', 'method' => 'POST', 'url' => route('register')]) }}
 
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
+                @component('parts.inline-form-component',['name' => 'name', 'label' => 'ユーザー名'])
+                    {{ Form::text('name', old('name'), ['class' => 'form-control', 'autofocus']) }}
+                @endcomponent
 
-                                @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                @component('parts.inline-form-component',['name' => 'userid', 'label' => 'ユーザーID'])
+                    {{ Form::text('userid', old('userid'), ['class' => 'form-control', 'autofocus']) }}
+                @endcomponent
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+                @component('parts.inline-form-component',['name' => 'email', 'label' => 'メールアドレス'])
+                    {{ Form::email('email', old('email'), ['class' => 'form-control', 'autofocus']) }}
+                @endcomponent
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
+                @component('parts.inline-form-component',['name' => 'password', 'label' => 'パスワード'])
+                    {{ Form::password('password', ['class' => 'form-control']) }}
+                @endcomponent
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                @component('parts.inline-form-component',['name' => 'password_confirmation', 'label' => '(再度入力)'])
+                    {{ Form::password('password_confirmation', ['class' => 'form-control']) }}
+                @endcomponent
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
+                @component('parts.group-form-component')
+                    {{ Form::submit('作成する', ['class' => 'btn btn-primary']) }}
+                    <a class="btn btn-link" href="{{ route('login') }}">既にアカウントを持っている</a>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                    {{--TODO 今は使わない(面倒くさい...)--}}
+                    {{--<a class="btn btn-link" href="{{ route('password.request') }}">パスワードを忘れた...</a>--}}
+                @endcomponent
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                {{ Form::close() }}
+            @endcomponent
 
-                        <div class="form-group">
-                            <label for="password-confirm" class="col-md-4 control-label">Confirm Password</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
-</div>
 @endsection
+
+
+
+@push('scripts')
+    <script>
+        var phases = ['name', 'userid', 'email', 'password', 'password_confirmation'];
+        var formName = '#register-form';
+
+        // ログイン画面支援
+        $(window).keydown(function(e) {
+            if(e.keyCode === 13) {
+                var name = $(e.target).attr('name');
+                var idx  = phases.indexOf(name);
+
+                if (phases.length-1 >= (idx+1)) {
+                    var newName = phases[idx+1];
+                    console.log(newName);
+                    $('[name="'+newName+'"]').focus();
+                    return false;
+                } else {
+                    $(formName).submit();
+                    return false;
+                }
+            }
+        });
+
+    </script>
+@endpush

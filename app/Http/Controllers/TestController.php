@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller {
 
+    public function __construct() {
+        $this->middleware('auth');
+        $this->middleware('can:admin');
+    }
+
     public function __invoke() {
         $branches = Branch::all();
         return view('page.test')->with(compact('branches'));

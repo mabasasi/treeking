@@ -17,10 +17,16 @@ class User extends Model
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'userid', 'email', 'password',
+        'current_branch_id', 'social',
     ];
 
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function currentBranch() {
+        return $this->belongsTo('App\Models\Branch', 'current_branch_id');
+    }
+
 }

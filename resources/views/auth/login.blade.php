@@ -1,69 +1,76 @@
-@extends('layouts.app')
+@extends('layouts.treeking')
+@section('title', 'ログイン')
 
 @section('content')
-<div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
+        <div class="col-md-8 offset-md-2">
 
-                <div class="panel-body">
-                    <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                        {{ csrf_field() }}
+            @component('parts.general-card-component')
+                @slot('header')
+                    {{ config('app.name', 'Laravel') }}&nbsp;&nbsp;ログイン
+                @endslot
 
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail Address</label>
+                {{ Form::open(['id' => 'login-form', 'method' => 'POST', 'url' => route('login')]) }}
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required autofocus>
+                @component('parts.inline-form-component',['name' => 'userid', 'label' => 'ユーザーID'])
+                    {{ Form::text('userid', old('userid'), ['class' => 'form-control', 'autofocus']) }}
+                @endcomponent
 
-                                @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                @component('parts.inline-form-component',['name' => 'password', 'label' => 'パスワード'])
+                    {{ Form::password('password', ['class' => 'form-control']) }}
+                @endcomponent
 
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Password</label>
+                {{--@component('parts.group-form-component')--}}
+                {{--<div class="form-group">--}}
+                {{--<div class="col-md-6 col-md-offset-4">--}}
+                {{--<div class="checkbox">--}}
+                {{--<label>--}}
+                {{--<input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me--}}
+                {{--</label>--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {{--</div>--}}
+                {{--@endcomponent--}}
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control" name="password" required>
+                @component('parts.group-form-component')
+                    {{ Form::submit('ログイン', ['class' => 'btn btn-primary']) }}
+                    <a class="btn btn-link" href="{{ route('register') }}">新規に作成する</a>
 
-                                @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+                    {{--TODO 今は使わない(面倒くさい...)--}}
+                    {{--<a class="btn btn-link" href="{{ route('password.request') }}">パスワードを忘れた...</a>--}}
+                @endcomponent
 
-                        <div class="form-group">
-                            <div class="col-md-6 col-md-offset-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                {{ Form::close() }}
+            @endcomponent
 
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Login
-                                </button>
-
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    Forgot Your Password?
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
-</div>
 @endsection
+
+
+
+@push('scripts')
+    <script>
+        var phases = ['userid', 'password'];
+        var formName = '#login-form';
+
+        // ログイン画面支援
+        $(window).keydown(function(e) {
+            if(e.keyCode === 13) {
+                var name = $(e.target).attr('name');
+                var idx  = phases.indexOf(name);
+
+                if (phases.length-1 >= (idx+1)) {
+                    var newName = phases[idx+1];
+                    console.log(newName);
+                    $('[name="'+newName+'"]').focus();
+                    return false;
+                } else {
+                    $(formName).submit();
+                    return false;
+                }
+            }
+        });
+
+    </script>
+@endpush

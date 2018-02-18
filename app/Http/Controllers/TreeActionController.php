@@ -19,10 +19,17 @@ use Illuminate\Http\Request;
 
 class TreeActionController extends Controller {
 
+
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function grow(TreeGrowRequest $request) {
         \DB::transaction(function() use ($request) {
             $branch = Branch::findOrFail($request->get('branch_id'));
             $branch->growMethod($request->get('name'));
+
+            \Auth::user()->fill(['current_branch_id' => $branch->id])->save();
         });
 
         return back();
@@ -36,6 +43,8 @@ class TreeActionController extends Controller {
                 'revision'     => $request->get('revision'),
                 'content'      => $request->get('content'),
             ]);
+
+            \Auth::user()->fill(['current_branch_id' => $sprig->branch_id])->save();
         });
 
         return back();
@@ -49,6 +58,8 @@ class TreeActionController extends Controller {
                 'revision'     => $request->get('revision'),
                 'content'      => $request->get('content'),
             ]);
+
+            \Auth::user()->fill(['current_branch_id' => $branch->id])->save();
         });
 
         return back();
@@ -57,6 +68,8 @@ class TreeActionController extends Controller {
     public function plant(TreePlantRequest $request) {
         \DB::transaction(function() use ($request) {
             $branch = Branch::create(['name' => $request['name']]);
+
+            \Auth::user()->fill(['current_branch_id' => $branch->id])->save();
         });
 
         return back();
@@ -66,6 +79,8 @@ class TreeActionController extends Controller {
         \DB::transaction(function() use ($request) {
             $sprig = Sprig::findOrFail($request->get('sprig_id'));
             $sprig->ramifyMethod($request->get('name'));
+
+            \Auth::user()->fill(['current_branch_id' => $sprig->branch_id])->save();
         });
 
         return back();
@@ -77,6 +92,8 @@ class TreeActionController extends Controller {
 
             $branch = Branch::findOrFail($request->get('branch_id'));
             $branch->graftMethod($request->get('name'), $sprig);
+
+            \Auth::user()->fill(['current_branch_id' => $branch->id])->save();
         });
 
         return back();

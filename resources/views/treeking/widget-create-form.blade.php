@@ -9,7 +9,7 @@
                 めもる！
                 <div class="pull-right">
                     <span id="branch-name" class="text-secondary">
-                        {{ optional(\App\models\Branch::ifRequestWhere('branch_id', ['id'])->updatedNewer()->first())->name ?? 'Nothing.' }}
+                        {{ optional($branch)->name ?? 'Nothing.' }}
                     </span>
                 </div>
             @endslot
@@ -17,7 +17,7 @@
             {{--入力画面--}}
             @component('parts.group-form-component',['name' => 'content'])
                 {{ Form::textarea('content', old('content'), ['class' => 'form-control', 'size' => '10x3',
-                        'placeholder' => 'めもの入力...', 'autofocus']) }}
+                        'placeholder' => 'めもの入力...', 'autofocus', 'required']) }}
             @endcomponent
 
             {{--簡易ツールバー--}}
@@ -37,7 +37,7 @@
                 <hr>
 
                 @component('parts.inline-form-component',['name' => 'branch_id', 'label' => '対象の 幹'])
-                    {{ Form::select('branch_id', \App\Models\Branch::selectPluck(), old('branch_id'), ['class' => 'form-control']) }}
+                    {{ Form::select('branch_id', \App\Models\Branch::selectPluck(), old('branch_id', optional($branch)->id), ['class' => 'form-control']) }}
                 @endcomponent
 
                 @component('parts.inline-form-component',['name' => 'revision', 'label' => 'リビジョン'])
