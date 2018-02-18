@@ -80,8 +80,8 @@
 
         top: 12px;
         left: 12px;
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
 
         border-radius: 50%;
         background: #d1e5fb;
@@ -92,7 +92,7 @@
         position: absolute;
 
         top: -8px;
-        left: 14px;
+        left: 16px;
         width: 4px;
         height: 24px;
 
@@ -103,7 +103,7 @@
         position: absolute;
 
         top: 16px;
-        left: 14px;
+        left: 16px;
         width: 4px;
         height: 30px;
 
@@ -113,7 +113,7 @@
     .icon-node-ramify {
         position: absolute;
 
-        top: 10px;
+        top: 4px;
         left: -18px;
         width: 32px;
         height: 16px;
@@ -121,21 +121,21 @@
         border-radius: 50px;
         background: rgba(0, 0, 0, 0);
         box-shadow: 0 0 0 4px #2d89ef;
-        clip: rect(-4px, 36px, 7px, 13px);
+        clip: rect(-4px, 36px, 7px, 18px);
     }
 
     .icon-node-graft {
         position: absolute;
 
-        top: 18px;
-        left: 8px;
+        top: 20px;
+        left: 5px;
         width: 16px;
         height: 32px;
 
         border-radius: 50px;
         background: rgba(0, 0, 0, 0);
         box-shadow: 0 0 0 4px #2d89ef;
-        clip: rect(-33px, 8px, 19px, -5px);
+        clip: rect(-33px, 8px, 13px, -5px);
     }
 
 
