@@ -4,13 +4,6 @@ namespace App\models;
 
 class Sprig extends Model {
 
-    protected $appends = ['branch_name'];
-
-    public function getBranchNameAttribute() {
-        return optional($this->branch)->name;
-    }
-
-
     protected $fillable = [
         'name', 'branch_id', 'parent_sprig_id', 'origin_sprig_id', 'current_leaf_id'
     ];
@@ -37,6 +30,14 @@ class Sprig extends Model {
     public function getIsTailAttribute() {
         $sprig_id = optional($this->branch)->tail_sprig_id;
         return ($sprig_id === $this->id);
+    }
+
+    public function getHasOriginAttribute() {
+        return $this->originSprig !== null;
+    }
+
+    public function getHasInsertAttribute() {
+        return optional($this->insertSprigs)->count() > 0;
     }
 
     public function branch() {
