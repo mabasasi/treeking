@@ -3,7 +3,7 @@
 @php($hasError  = count($errors) > 0)
 @php($thisError = $errors->has($name))
 
-<div class="form-group row">
+<div class="form-group row{{ isset($class) ? ' '.$class : '' }}">
     <label for="{{ $name }}" class="col-sm-2 col-form-label">{{ $label }}</label>
     <div class="col-sm-10{{ ($thisError) ? ' is-invalid' : (($hasError) ? ' is-valid' : '') }}">
          {{ $slot }}
