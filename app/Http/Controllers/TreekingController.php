@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 class TreekingController extends Controller {
 
     public function index() {
-        $sprigs = Sprig::where('branch_id', 1)->createdNewer()->with('leaves')->get();
+        $sprigs = Sprig::ifRequestWhere('branch_id', ['branch_id'])
+            ->createdNewer()
+            ->with('leaves')
+            ->get();
 
         return view('treeking.index')->with(compact('sprigs'));
     }
