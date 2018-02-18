@@ -11,7 +11,7 @@ class DebugController extends Controller {
     }
 
     public function dbSeed() {
-        $exec = \Artisan::call('db:seed');
+        $exec = \Artisan::call('db:seed', ['--class' => 'TestDataSeeder']);
         return back();
     }
 
