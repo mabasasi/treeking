@@ -17,7 +17,7 @@
             {{--入力画面--}}
             @component('parts.group-form-component',['name' => 'content'])
                 {{ Form::textarea('content', old('content'), ['class' => 'form-control', 'size' => '10x3',
-                        'placeholder' => 'めもの入力...', 'autofocus']) }}
+                        'placeholder' => 'めもの入力...', 'autofocus', 'required']) }}
             @endcomponent
 
             {{--簡易ツールバー--}}
