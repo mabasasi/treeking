@@ -20,6 +20,7 @@ Route::get('/home', 'TestController')->name('test');
 
 
 Route::get('/treeking', 'TreekingController@index')->name('treeking.index');
+Route::get('/treeking/get', 'TreekingController@getSprigs')->name('treeking.get');
 
 
 
