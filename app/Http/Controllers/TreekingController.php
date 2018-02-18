@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class TreekingController extends Controller {
 
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function index() {
         $sprigs = Sprig::ifRequestWhere('branch_id', ['branch_id'])
             ->createdNewer()

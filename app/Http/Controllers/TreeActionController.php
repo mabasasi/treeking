@@ -19,6 +19,11 @@ use Illuminate\Http\Request;
 
 class TreeActionController extends Controller {
 
+
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     public function grow(TreeGrowRequest $request) {
         \DB::transaction(function() use ($request) {
             $branch = Branch::findOrFail($request->get('branch_id'));

@@ -8,9 +8,12 @@
 
         <!-- Left Element -->
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('test') }}">テストページ</a>
-            </li>
+            @can('admin')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('test') }}">テストページ</a>
+                </li>
+            @endcan
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('treeking.index') }}">めも帳</a>
             </li>
