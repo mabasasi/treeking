@@ -7,7 +7,7 @@
 
             @component('parts.general-card-component')
                 @slot('header')
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'Laravel') }}&nbsp;&nbsp;ログイン
                 @endslot
 
                 {{ Form::open(['id' => 'login-form', 'method' => 'POST', 'url' => route('login')]) }}
@@ -34,6 +34,7 @@
 
                 @component('parts.group-form-component')
                     {{ Form::submit('ログイン', ['class' => 'btn btn-primary']) }}
+                    <a class="btn btn-link" href="{{ route('register') }}">新規に作成する</a>
 
                     {{--TODO 今は使わない(面倒くさい...)--}}
                     {{--<a class="btn btn-link" href="{{ route('password.request') }}">パスワードを忘れた...</a>--}}
@@ -50,22 +51,24 @@
 
 @push('scripts')
     <script>
+        var phases = ['userid', 'password'];
+        var formName = '#login-form';
 
         // ログイン画面支援
         $(window).keydown(function(e) {
             if(e.keyCode === 13) {
                 var name = $(e.target).attr('name');
-                console.log(name);
-                if (name === 'userid') {
-                    $('[name="password"]').focus();
-                    return false;
-                }
+                var idx  = phases.indexOf(name);
 
-                if (name === 'password') {
-                    $('#login-form').submit();
+                if (phases.length-1 >= (idx+1)) {
+                    var newName = phases[idx+1];
+                    console.log(newName);
+                    $('[name="'+newName+'"]').focus();
+                    return false;
+                } else {
+                    $(formName).submit();
                     return false;
                 }
-                return false;
             }
         });
 
