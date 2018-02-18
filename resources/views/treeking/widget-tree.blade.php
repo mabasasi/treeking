@@ -2,134 +2,145 @@
 <div class="row">
     <div class="col">
 
-        <canvas id="gitGraph"></canvas>
+        <div id="gitGraph" class="git-graph">
+            @foreach($sprigs as $sprig)
 
-        <div id="girGraphContent">
-            <div id="detail" class="gitgraph-detail">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint, ducimus,
-                qui fuga corporis veritatis doloribus iure nulla optio dolores maiores dolorum
-                ullam alias cum libero obcaecati cupiditate sit illo aperiam possimus voluptatum
-                similique neque explicabo quibusdam aspernatur dolorem. Quod, corrupti magni
-                explicabo nam sequi nesciunt accusamus aliquam dolore! Cumque, quam fugiat ab
-                veritatis. Quia, maxime quas perferendis cupiditate explicabo at atque iusto
-                accusamus. Nesciunt veniam quidem nemo doloribus! Dolore, cupiditate, adipisci,
-                voluptate quam nihil ipsa placeat dolor possimus minus quas nostrum eaque in dicta
-                autem eligendi rerum facilis nesciunt sunt doloremque suscipit enim iure vitae eius
-                voluptates tempora tenetur hic.
-            </div>
+                @component('parts.general-card-component', ['class' => 'git-node'])
+                    @slot('header')
+                        {{ $sprig->name ?? 'no' }}
+                    @endSlot
+                        {{ $sprig->currentLeave->content }}
+                @endcomponent
+
+                <div class="row">
+                    <div class="col-1">
+                        <div class="git-icon">
+                            @if($sprig->originSprig)
+                                {{--origin--}}
+                                <span class="icon-node-top"></span>
+                                <span class="icon-node-bottom"></span>
+                                <span class="icon-node-graft"></span>
+                                <span class="icon-circle"></span>
+
+                            @elseif(optional($sprig->insertSprigs)->count())
+
+                                {{--insert--}}
+                                <span class="icon-node-top"></span>
+                                <span class="icon-node-bottom"></span>
+                                <span class="icon-node-ramify"></span>
+                                <span class="icon-circle"></span>
+                            @elseif($sprig->is_tail)
+
+                                {{--tail--}}
+                                <span class="icon-node-top"></span>
+                                <span class="icon-circle"></span>
+                            @else
+
+                                {{--default--}}
+                                <span class="icon-node-top"></span>
+                                <span class="icon-node-bottom"></span>
+                            @endIf
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="git-content">
+                        asd
+                        </div>
+                    </div>
+                </div>
+
+            @endforeach
         </div>
 
     </div>
 </div>
 
 @push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.11.4/gitgraph.min.css"/>
+<style>
+
+
+
+
+    .git-icon {
+        position: relative;
+
+        width: 32px;
+        height: 32px;
+
+        /*background: darkseagreen;*/
+    }
+
+    .git-content {
+        line-height: 32px;
+    }
+
+
+    .icon-circle {
+        position: absolute;
+
+        top: 12px;
+        left: 12px;
+        width: 8px;
+        height: 8px;
+
+        border-radius: 50%;
+        background: #d1e5fb;
+        box-shadow: 0 0 0 2px #2d89ef;
+    }
+
+    .icon-node-top {
+        position: absolute;
+
+        top: -8px;
+        left: 14px;
+        width: 4px;
+        height: 24px;
+
+        background-color: #2d89ef;
+    }
+
+    .icon-node-bottom {
+        position: absolute;
+
+        top: 16px;
+        left: 14px;
+        width: 4px;
+        height: 30px;
+
+        background-color: #2d89ef;
+    }
+
+    .icon-node-ramify {
+        position: absolute;
+
+        top: 10px;
+        left: -18px;
+        width: 32px;
+        height: 16px;
+
+        border-radius: 50px;
+        background: rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 4px #2d89ef;
+        clip: rect(-4px, 36px, 7px, 13px);
+    }
+
+    .icon-node-graft {
+        position: absolute;
+
+        top: 18px;
+        left: 8px;
+        width: 16px;
+        height: 32px;
+
+        border-radius: 50px;
+        background: rgba(0, 0, 0, 0);
+        box-shadow: 0 0 0 4px #2d89ef;
+        clip: rect(-33px, 8px, 19px, -5px);
+    }
+
+
+</style>
 @endpush
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.11.4/gitgraph.min.js"></script>
-
-<script>
-    // TODO GIT GRAPH は逆向きに作る
-    var sprigs = {!! $sprigs !!};
-    console.log(sprigs);
-
-    var branches = {};
-
-
-
-    var myTemplateConfig = {
-        colors: ["#F00", "#0F0", "#00F"], // branches colors, 1 per column
-        branch: {
-            lineWidth: 8,
-            // Dash segments, see:
-            // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
-            // lineDash: [5, 3],
-            spacingX: 50
-        },
-        commit: {
-            spacingY: -80,
-            dot: {
-                size: 12,
-                // lineDash: [4]
-            },
-            message: {
-                displayAuthor: false,
-                displayBranch: false,
-                displayHash: false,
-                font: "normal 12pt Arial"
-            },
-            shouldDisplayTooltipsInCompactMode: false, // default = true
-            tooltipHTMLFormatter: function (commit) {
-                return "<b>" + commit.sha1 + "</b>" + ": " + commit.message;
-            }
-        }
-    };
-    var myTemplate = new GitGraph.Template(myTemplateConfig);
-
-    var gitgraph = new GitGraph({
-        template: myTemplate, // blackarrow, metro
-        reverseArrow: true,
-        orientation: "vertical",
-        mode: 'extend',
-    });
-
-
-    var append_sprig = function(sprig) {
-        // branch チェック
-        checkout_or_create_branch(sprig.branch_name);
-
-        // detail 作成
-        var detail = '<div id="detail-'+sprig.id+'" class="gitgraph-detail">'+sprig.leaves[0].content+'</div>';
-        $('#girGraphContent').append(detail);
-
-        gitgraph.commit({
-            message: sprig.name,
-            detailId: 'detail-'+sprig.id,
-        });
-    };
-
-    // ブランチを 取得 or 作成する
-    var checkout_or_create_branch = function(branch_name) {
-        var branch = branches[branch_name];
-        if (branch) {
-            branch.checkout();
-            return branch;
-        } else {
-            gitgraph.branch(branch_name);
-        }
-    };
-
-
-
-    append_sprig(sprigs[0]);
-
-
-
-
-
-    // var master = gitgraph.branch('master');
-    //
-    // gitgraph.commit('initial commit');
-    //
-    // gitgraph.commit({
-    //     message: '2nd commit',
-    //     author: 'Anonymous <anonymous@example.com>',
-    //     tag: 'v0.0.1',
-    //     dotColor: 'white',
-    //     dotSize: 10,
-    //     dotStrokeWidth: 10
-    // });
-    //
-    // var feature = gitgraph.branch("feature-of-death");
-    //
-    // gitgraph.commit({
-    //     message: '3rd commit',
-    //     detailId: 'detail',
-    // });
-    //
-    // master.checkout();
-    // gitgraph.commit('4th commit');
-
-</script>
 @endpush
