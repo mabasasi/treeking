@@ -49,6 +49,7 @@ class TreekingController extends Controller {
             'branch_id'    => 'required|exists:branches,id',
             'last_node_id' => 'nullable|exists_or_null:sprigs,id', // これを基準にデータを取得する
             'count'        => 'required|integer|min:1',
+            'split'        => 'nullable|boolean',
         ])->validate();
 
         // ブランチ取得
@@ -79,74 +80,106 @@ class TreekingController extends Controller {
 
 
         // データ構築を行う
-        $array =[];
+        $array = new Collection();
         $count = $request->get('count');
         for ($i=0; $i<$count; $i++) {
             $leaf = optional($sprig->currentLeave);
 
-            // origins 作成
-            $outerItems = [];
-            if ($sprig->has_origin) {
-                $origin = $sprig->originSprig;
-                $originBranch =  optional($origin->branch);
+            // 自身のノードを追加する
+            $node = [
+                'type' => 'node',
 
-                $item = [
-                    'node_type' => 'origin',
+                'branch_id'         => $branch->id,
+                'branch_name'       => $branch->name,
+                'branch_created_at' => optional($branch->created_at)->toDateTimeString(),
 
-                    'branch_id'   => $originBranch->id,
-                    'branch_name' => $originBranch->name,
-                    'node_id'     => $origin->id,
-                    'node_name'   => $origin->name,
-
-                    // TODO 何なら leaf まで
-                ];
-                $outerItems[] = $item;
-            }
-
-            // inserts 作成
-            $insertItems = [];
-            if ($sprig->has_insert) {
-                foreach ($sprig->insertSprigs as $insert) {
-                    $insertBranch = optional($insert->branch);
-
-                    $item = [
-                        'node_type' => 'insert',
-
-                        'branch_id'   => $insertBranch->id,
-                        'branch_name' => $insertBranch->name,
-                        'sprig_id'    => $insert->id,
-                        'sprig_name'  => $insert->name,
-
-                        // TODO 何なら leaf まで
-                    ];
-                    $outerItems[] = $item;
-                }
-            }
-
-
-            $item = [
-                'branch_id'   => $branch->id,
-                'branch_name' => $branch->name,
-
-                'node_id'     => $sprig->id,
-                'node_title'  => $sprig->name,
+                'node_id'   => $sprig->id,
+                'node_name' => $sprig->name,
 
                 'current_content_id' => $leaf->id,
                 'content'            => $leaf->content,
+                'content_type_id'    => $leaf->content_type_id,
                 'content_type'       => optional($leaf->leaf_type_id)->name,
-                'content_type_id'    => $leaf->leaf_type_id,
 
-                'node_is_head' => $sprig->is_head,
-                'node_is_tail' => $sprig->is_tail,
+                'node_is_head'    => $sprig->is_head,
+                'node_is_tail'    => $sprig->is_tail,
                 'node_has_origin' => $sprig->has_origin,
                 'node_has_insert' => $sprig->has_insert,
-                'node_is_plane' => !($sprig->has_origin or $sprig->has_insert or $sprig->has_tail),   // 描画用 util
-
-                'outer_nodes' => $outerItems,
-
-                'branch_created_at' => $branch->created_at,
             ];
-            $array[] = $item;
+
+
+            // 自身の関連ノード取得
+            $refs = [];
+
+
+            // origin 取ってくる
+            if (($origin = ($sprig->originSprig))) {
+                $originBranch =  optional($origin->branch);
+                $item = [
+                    'type' => 'origin',
+
+                    'branch_id'         => $originBranch->id,
+                    'branch_name'       => $originBranch->name,
+                    'branch_created_at' => optional($originBranch->created_at)->toDateTimeString(),
+
+                    'node_id'     => $origin->id,
+                    'node_name'   => $origin->name,
+                ];
+                $refs[] = $item;
+            }
+
+            // inserts 取ってくる
+            foreach ($sprig->insertSprigs as $insert) {
+                $insertBranch =  optional($insert->branch);
+                $item = [
+                    'type' => 'insert',
+
+                    'branch_id'         => $insertBranch->id,
+                    'branch_name'       => $insertBranch->name,
+                    'branch_created_at' => optional($insertBranch->created_at)->toDateTimeString(),
+
+                    'node_id'     => $insert->id,
+                    'node_name'   => $insert->name,
+                ];
+                $refs[] = $item;
+            }
+
+            // 何もなければ ダミーを作成
+            $dummy = null;
+            if (count($refs) === 0) {
+                if ($sprig->is_tail) {
+                    $bbr = $sprig->branch;
+                    $item = [
+                        'type' => 'tail',
+
+                        'branch_id'         => $bbr->id,
+                        'branch_name'       => $bbr->name,
+                        'branch_created_at' => optional($bbr->created_at)->toDateTimeString(),
+                    ];
+                }  else {
+                    $item = [
+                        'type' => 'none',
+                    ];
+                }
+                $dummy = $item;
+            }
+
+
+            ////////////////////////////////////////
+
+            // 追加していくぅ
+            if ($request->get('split')) {
+                $array->push($node);
+                foreach ($refs as $ref) {
+                    $array->push($ref);
+                }
+                if ($dummy) {
+                    $array->push($dummy);
+                }
+            } else {
+                $node['refs'] = $refs;
+                $array->push($node);
+            }
 
             // 次を取ってくる
             $sprig = $sprig->parentSprig;

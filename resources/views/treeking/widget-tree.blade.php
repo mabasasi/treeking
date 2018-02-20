@@ -219,9 +219,12 @@
 @push('scripts')
 <script>
     $(function() {
+
+        var TREEKING_INDEX_URL = "{!! route('treeking.index') !!}";
         var TREEKING_API_URL = "{!! route('treeking.get') !!}";
         var graph = $('#node-graph');
-        var wait = 0;
+        var WAIT_TIME = 200;
+        var FADE_MODE = 'slow';
 
 
 
@@ -231,48 +234,75 @@
         var buffer_nodes = [];
 
         $(window).ready(function() {
-            load_next_node();
+            load_treeking_graph();
         });
 
 
-        var load_next_node = function() {
+
+
+        // メモツリー取得
+        var load_treeking_graph = function() {
+            // データが存在する場合は終了
+            if (buffer_nodes.length > 0) {
+                console.log('[error] data is not empty.');
+                return;
+            }
+
             // データ取得
             var meta = {
                 branch_id:    graph.data('branch-id'),
                 count:        graph.data('count'),
-                last_node_id: last_node_id,
+                last_node_id: last_node_id,          // 初期 null
+                split:        1,
             };
 
             // ajax
+            console.log('[ajax] get json.');
             $.getJSON(TREEKING_API_URL, meta, function(data) {
+                // if error
+                if ('errors' in data) {
+                    window.alert(JSON.stringify(data));
+                    return;
+                }
+
                 // とりま buffer に突っ込む
                 for(var key in data) {
                     buffer_nodes.push(data[key]);
                 }
 
-                // デーモン起動
-                run_node_daemon();
+                // デーモン実行
+                start_treeking_graph();
             });
         };
 
 
 
+        //////////////////////////////////////////////////////////////////////
+        /// デーモン 本体
+        //////////////////////////////////////////////////////////////////////
 
-
-        // デーモン
-        var run_daemon = false;
-        var run_node_daemon = function() {
-            // デーモンが実行していないならば、実行する
-            if (!run_daemon) {
-                console.log('[run]put daemon.');
-                run_daemon = true;
-                put_node_daemon();
+        // デーモン実行
+        var run_treeking_graph = false;
+        var start_treeking_graph = function() {
+            // 既に実行されているなら終了
+            if (run_treeking_graph) {
+                console.log('[error] daemon already running.');
+                return;
             }
+
+            // デーモン実行
+            console.log('[start] daemon run.');
+            run_treeking_graph = true;
+            treeking_graph_daemon();
         };
-        var put_node_daemon = function() {
+
+
+
+        // デーモン本体
+        var treeking_graph_daemon = function() {
             // デーモン起動許可がない場合は終了する
-            if (!run_daemon) {
-                console.log('[warning]interrupt.');
+            if (!run_treeking_graph) {
+                console.log('[error] daemon was interrupted.');
                 return;
             }
 
@@ -281,161 +311,186 @@
 
             // ノードがない場合はデーモンを終了させる
             if (node == null) {
-                console.log('[stop]put deamon. empty nodes.');
-                run_daemon = false;
+                console.log('[stop] daemon stop. success.');
+                run_treeking_graph = false;
                 return;
             }
 
             // ノードを追加する
-            console.log('[exec]put node...');
-            console.log(node);
-            create_node_area(node);
-        };
+            console.log('[exec]draw html...');
+            var dom = draw_treeking_graph(node);
 
-
-
-        ////////////////////////////////////////////////////////////
-        // put method
-        ////////////////////////////////////////////////////////////
-
-
-
-
-        var create_node_area = function(node) {
-            var doms = [];
-
-            // ノード作成
-            doms.push(create_node(node));
-
-            // エッジ作成
-            if (node['outer_nodes'].length > 0) {
-                for (var key in node['outer_nodes']) {
-                    doms.push(create_edge(node, key));
-                }
-            } else {
-                doms.push(create_edge(node, null));
-            }
-
-
-
-            // append and fade in
-            put_node_area(doms);
-        };
-
-
-        var put_node_area = function(doms) {
-            // ノード取得
-            var dom_string = doms.shift();
-
-            // 無ければ終了
-            if (dom_string == null) {
-                // TODO メソッドの切り分け!!
-                // 待機して再追加
-                console.log('next '+wait+'ms.')
-                setTimeout(function() {
-                    put_node_daemon()
-                }, wait);
-
-                return;
-            }
-
-            // append and fade in
-            var dom = $(dom_string);
-            graph.append(dom);
+            // 完成待機からの自身を実行
             dom.ready(function() {
-
-                dom.fadeIn(function() {
+                // アニメーション実行
+                dom.fadeIn(FADE_MODE, function() {
                     dom.removeClass('hide');
-                    setTimeout(function() {
-                        put_node_area(doms);
-                    }, wait);
                 });
 
+                // 次を裏で作っておく
+                setTimeout(function() {
+                    treeking_graph_daemon();
+                }, WAIT_TIME);
             });
         };
 
 
 
+        //////////////////////////////////////////////////////////////////////
+        /// デーモンの処理関数
+        //////////////////////////////////////////////////////////////////////
 
+        // メモツリーをひとつ描画する
+        // @return dom entity
+        var draw_treeking_graph = function(node) {
+            // テキスト取得
+            var text = create_html_switcher(node);
 
-
-        ////////////////////////////////////////////////////////////
-        // draw method
-        ////////////////////////////////////////////////////////////
-
-
-        var create_edge = function(node, outerkey) {
-            // origin, insert, tail, plane
-            var mode = (outerkey) ? node['outer_nodes'][outerkey]['node_type']
-                : (node['node_is_tail'] ? 'tail' : 'plane');
-
-            var dom = '';
-            dom += '<div class="area edge-area hide">';
-                dom += '<div class="row mb-2">';
-
-                    dom += '<div class="col-1">';
-                        dom += '<div class="git-icon">';
-                            switch (mode) {
-                                case 'origin' :
-                                    dom += '<span class="icon-node-top"></span>';
-                                    dom += '<span class="icon-node-bottom"></span>';
-                                    dom += '<span class="icon-node-graft"></span>';
-                                    dom += '<span class="icon-circle"></span>';
-                                    break;
-                                case 'insert' :
-                                    dom += '<span class="icon-node-top"></span>';
-                                    dom += '<span class="icon-node-bottom"></span>';
-                                    dom += '<span class="icon-node-ramify"></span>';
-                                    dom += '<span class="icon-circle"></span>';
-                                    break;
-                                case 'tail' :
-                                    dom += '<span class="icon-node-top"></span>';
-                                    dom += '<span class="icon-circle"></span>';
-                                    break;
-                                default :
-                                    dom += '<span class="icon-node-top"></span>';
-                                    dom += '<span class="icon-node-bottom"></span>';
-                                    break;
-                            }
-                        dom += '</div>';
-                    dom += '</div>';
-
-                    dom += '<div class="col">';
-                        dom += '<div class="col">';
-                            dom += mode;
-                        dom +='</div>';
-                    dom +='</div>';
-
-                dom +='</div>';
-            dom +='</div>';
-
+            // dom　作成 -> dom 返却
+            var dom = $(text);
+            graph.append(dom);
             return dom;
         };
 
+        //////////////////////////////////////////////////////////////////////
+        /// 描画関数
+        //////////////////////////////////////////////////////////////////////
 
-        var create_node = function(node) {
-            var dom = '';
-            dom += '<div class="area node-area hide">';
-                dom += '<div class="card margin">';
+        var create_html_switcher = function(node) {
+            switch(node['type']) {
+                case 'node': return create_node_html(node);
+                case 'origin':
+                case 'insert':
+                case 'none':
+                case 'tail':
+                    return create_edge_html(node, node['type']);
 
-                    dom += '<div class="card-header">';
-                        dom += node['node_title'] || '<span class="text-secondary">NO TITLE</span>';
-                    dom += '</div>';
-
-                    dom += '<div class="card-body">';
-                        dom += node['content'];
-                    dom += '</div>';
-
-                dom += '</div>';
-            dom +='</div>';
-
-            return dom;
+                default:     return create_default_html(node);
+            }
         };
 
 
 
+        var create_default_html = function(node) {
+            var text = '';
+            text += '<div class="area node-area hide">';
+            text += 'default';
+            text += '</div>';
+            return text;
+        };
+
+        var create_node_html = function(node) {
+            var text = '';
+            text += '<div class="area node-area hide">';
+                text += '<div class="card margin">';
+
+                    text += '<div class="card-header">';
+                        text += node['node_title'] || '<span class="text-secondary">NO TITLE</span>';
+                    text += '</div>';
+
+                    text += '<div class="card-body">';
+                        text += node['content'];
+                    text += '</div>';
+
+                text += '</div>';
+            text +='</div>';
+            return text;
+        };
+
+        var create_edge_html = function(node, mode) {
+            var meta = crate_edge_text(node, mode);
+
+            var text = '';
+            text += '<div class="area edge-area hide">';
+                text += '<div class="row mb-2">';
+
+                    text += '<div class="col-1">';
+                        text += '<div class="git-icon">';
+                            text += meta['icon'];
+                        text += '</div>';
+
+                    text +='</div>';
+
+                    text += '<div class="col">';
+                        text += meta['content'];
+                    text +='</div>';
+
+                text +='</div>';
+            text +='</div>';
+            return text;
+        };
 
 
+
+
+
+
+        var crate_edge_text = function(node, mode) {
+            var meta = [];
+
+            // アイコン作成
+            var text = '';
+            switch (mode) {
+                case 'origin' :
+                    text += '<span class="icon-node-top"></span>';
+                    text += '<span class="icon-node-bottom"></span>';
+                    text += '<span class="icon-node-graft"></span>';
+                    text += '<span class="icon-circle"></span>';
+                    break;
+                case 'insert' :
+                    text += '<span class="icon-node-top"></span>';
+                    text += '<span class="icon-node-bottom"></span>';
+                    text += '<span class="icon-node-ramify"></span>';
+                    text += '<span class="icon-circle"></span>';
+                    break;
+                case 'tail' :
+                    text += '<span class="icon-node-top"></span>';
+                    text += '<span class="icon-circle"></span>';
+                    break;
+                default :
+                    text += '<span class="icon-node-top"></span>';
+                    text += '<span class="icon-node-bottom"></span>';
+                    break;
+            }
+            meta['icon'] = text;
+
+
+            // 内容作成
+            var text = '';
+            switch (mode) {
+                case 'origin' :
+                    var href = TREEKING_INDEX_URL + '?branch_id=' + node['branch_id'] + '&sprig_id=' + node['sprig_id'];
+                    text += '<a class="btn btn-under-animation mr-1" href=' + href + '>';
+                        text += '<i class="fas fa-angle-double-right"></i>&nbsp;&nbsp;' + node['branch_name'] + 'から統合';
+                    text += '</a>';
+
+                    text += '<small>';
+                        text += node['node_name'];
+                    text += '</small>';
+                    break;
+                case 'insert' :
+                    var href = TREEKING_INDEX_URL + '?branch_id=' + node['branch_id'] + '&sprig_id=' + node['sprig_id'];
+                    text += '<a class="btn btn-under-animation mr-1" href=' + href + '>';
+                    text += '<i class="fas fa-angle-double-left"></i>&nbsp;&nbsp;' + node['branch_name'] + 'へ分岐';
+                    text += '</a>';
+
+                    text += '<small>';
+                    text += node['node_name'];
+                    text += '</small>';
+                    break;
+                case 'tail' :
+                    text += '<small class="btn">';
+                    text += '<i class="fas fa-plus"></i>&nbsp;&nbsp;' + node['branch_created_at'] + '&nbsp;&nbsp;に作成';
+                    text += '</small>';
+                    break;
+                default :
+                    text += '';
+                    break;
+            }
+            meta['content'] = text;
+
+            return meta;
+        };
 
     });
 
