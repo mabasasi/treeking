@@ -230,12 +230,41 @@
 
 
         var last_node_id = null;
-        var is_reach_last = false;
         var buffer_nodes = [];
 
         $(window).ready(function() {
             load_treeking_graph();
         });
+
+
+
+
+
+        // ブランチ名更新
+        $(document).on('change', '[name="branch_id"]', function() {
+            // ブランチ ID をセット
+            var branch_id = $('[name="branch_id"]').val();
+            graph.data('branch-id', branch_id);
+
+            reload_treeking_graph();
+        });
+
+
+
+
+
+
+        var reload_treeking_graph = function() {
+            graph.fadeOut(function() {
+                graph.empty();
+                graph.fadeIn();
+
+                // 初期化
+                buffer_nodes = [];
+                last_node_id = null;
+                load_treeking_graph();
+            });
+        };
 
 
 
@@ -447,6 +476,9 @@
                     text += '<span class="icon-node-top"></span>';
                     text += '<span class="icon-circle"></span>';
                     break;
+                case 'no-tail':
+                    text += '<span class="icon-circle"></span>';
+                    break;
                 default :
                     text += '<span class="icon-node-top"></span>';
                     text += '<span class="icon-node-bottom"></span>';
@@ -472,6 +504,16 @@
                     var href = TREEKING_INDEX_URL + '?branch_id=' + node['branch_id'] + '&sprig_id=' + node['sprig_id'];
                     text += '<a class="btn btn-under-animation mr-1" href=' + href + '>';
                     text += '<i class="fas fa-angle-double-left"></i>&nbsp;&nbsp;' + node['branch_name'] + 'へ分岐';
+                    text += '</a>';
+
+                    text += '<small>';
+                    text += node['node_name'];
+                    text += '</small>';
+                    break;
+                case 'no-tail':
+                    var href = TREEKING_INDEX_URL + '?branch_id=' + node['branch_id'] + '&sprig_id=' + node['sprig_id'];
+                    text += '<a class="btn btn-under-animation mr-1" href=' + href + '>';
+                    text += '<i class="fas fa-angle-double-right"></i>&nbsp;&nbsp;' + node['branch_name'] + 'から作成';
                     text += '</a>';
 
                     text += '<small>';
