@@ -25,6 +25,11 @@ class TestDataSeeder extends Seeder
         LeafType::truncate();
         \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
+        // ユーザーがいたらすべての初期ブランチを削除
+        foreach (\App\Models\User::all() as $user) {
+            $user->fill(['current_branch_id' => null])->save();
+        }
+
         // テストケースを作成する
         LeafType::create(['id' => Consts::FRUIT_TYPE_PLANE, 'name' => '標準']);
 

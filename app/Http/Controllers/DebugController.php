@@ -7,11 +7,12 @@ use Illuminate\Http\Request;
 class DebugController extends Controller {
 
     public function __construct() {
-        // TODO debug 環境の制限を付ける
+        $this->middleware('auth');
+        $this->middleware('can:admin');
     }
 
     public function dbSeed() {
-        $exec = \Artisan::call('db:seed');
+        $exec = \Artisan::call('db:seed', ['--class' => 'TestDataSeeder']);
         return back();
     }
 

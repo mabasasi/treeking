@@ -4,45 +4,59 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarContent">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
         <!-- Left Element -->
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('test') }}">テストページ</a>
-            </li>
+            @can('admin')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('test') }}">テストページ</a>
+                </li>
+            @endcan
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('treeking.index') }}">めも帳</a>
             </li>
-
-            {{--<li class="nav-item active">--}}
-                {{--<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>--}}
-            {{--</li>--}}
-            {{--<li class="nav-item">--}}
-                {{--<a class="nav-link" href="#">Link</a>--}}
-            {{--</li>--}}
-            {{--<li class="nav-item dropdown">--}}
-                {{--<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
-                    {{--Dropdown--}}
-                {{--</a>--}}
-                {{--<div class="dropdown-menu" aria-labelledby="navbarDropdown">--}}
-                    {{--<a class="dropdown-item" href="#">Action</a>--}}
-                    {{--<a class="dropdown-item" href="#">Another action</a>--}}
-                    {{--<div class="dropdown-divider"></div>--}}
-                    {{--<a class="dropdown-item" href="#">Something else here</a>--}}
-                {{--</div>--}}
-            {{--</li>--}}
-            {{--<li class="nav-item">--}}
-                {{--<a class="nav-link disabled" href="#">Disabled</a>--}}
-            {{--</li>--}}
         </ul>
 
         <!-- Right Element -->
-        <span class="navbar-text">
-            branch: {{ git_branch() ?? 'none' }},&nbsp;
-            env: {{ \Config::get('app.env') }} - {{ \Config::get('app.debug') == 'true' ? 'debug' : '' }}
-        </span>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <span class="navbar-text">
+                    @auth
+                        branch: {{ optional(\Auth::user()->currentBranch)->name ?? '-' }},&nbsp;&nbsp;
+                    @endauth
+                    git: {{ git_branch() ?? 'none' }},&nbsp;&nbsp;
+                    env: {{ \Config::get('app.env') }} - {{ \Config::get('app.debug') == 'true' ? 'debug' : '' }}&nbsp;&nbsp;
+                </span>
+            </li>
 
+            @guest
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('login') }}">ログイン</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('register') }}">新規登録</a>
+                </li>
+            @else
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ optional(\Auth::user())->name }}&nbsp;さん
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{{ route('home') }}">ホーム</a>
+                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            ログアウト
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    </div>
+                </li>
+            @endcan
+
+            <span class="mr-3"></span>
+
+        </ul>
     </div>
-
 </nav>

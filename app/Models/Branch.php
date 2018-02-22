@@ -10,6 +10,16 @@ class Branch extends Model {
         'name', 'head_sprig_id', 'tail_sprig_id'
     ];
 
+    public function getIsCurrentAttribute() {
+        // ログインしているユーザーを基準にする
+        $auth = \Auth::user();
+        if ($auth) {
+            $branch_id = $auth->current_branch_id;
+            return ($branch_id === $this->id);
+        }
+        return false;
+    }
+
     public function getIsEmptyAttribute() {
         return optional($this->sprigs)->isEmpty();
     }
@@ -24,6 +34,10 @@ class Branch extends Model {
 
     public function tailSprig() {
         return $this->belongsTo('App\Models\Sprig', 'tail_sprig_id');
+    }
+
+    public function users() {
+        return $this->hasMany('App\Models\User', 'current_branch_id');
     }
 
 
